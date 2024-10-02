@@ -6,7 +6,7 @@
       <env name="ENV_PROTUBE_DB" value="protube-dev" />
       <env name="ENV_PROTUBE_DB_PWD" value="secret" />
       <env name="ENV_PROTUBE_DB_USER" value="root" />
-      <env name="ENV_PROTUBE_STORE_DIR" value="F:\AAATecnocampus\4rt Curs\1r trimestre\Lab Software 2\videos-10\" />
+      <env name="ENV_PROTUBE_STORE_DIR" value="C:\Users\julia\Desktop\Tecnocampus\4t Curso\1r Trimestre\Laboratori de software II\Videos\" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="com.tecnocampus.LS2.protube_back.ProtubeBackApplication" />
     <module name="protube-back" />
