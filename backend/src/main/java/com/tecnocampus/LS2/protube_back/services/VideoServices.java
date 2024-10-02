@@ -6,7 +6,9 @@ import java.util.List;
 
 @Service
 public class VideoServices {
+
     public List<String> getVideos() {
         return List.of("video1", "video2", "video3");
     }
+
 }
