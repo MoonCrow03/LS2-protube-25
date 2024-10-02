@@ -3,10 +3,10 @@
     <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
-      <env name="ENV_PROTUBE_DB_PWD" value="secret" />
       <env name="ENV_PROTUBE_DB" value="protube-dev" />
+      <env name="ENV_PROTUBE_DB_PWD" value="secret" />
       <env name="ENV_PROTUBE_DB_USER" value="root" />
-      <env name="ENV_PROTUBE_STORE_DIR" value="~/code/test-videos" />
+      <env name="ENV_PROTUBE_STORE_DIR" value="F:\AAATecnocampus\4rt Curs\1r trimestre\Lab Software 2\videos-10\" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="com.tecnocampus.LS2.protube_back.ProtubeBackApplication" />
     <module name="protube-back" />

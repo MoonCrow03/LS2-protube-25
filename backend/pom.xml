@@ -33,6 +33,8 @@
 		<node.version>v18.19.1</node.version>
 		<npm.version>9.2.0</npm.version>
 		<frontend-src-dir>${basedir}/../frontend</frontend-src-dir>
+		<maven.compiler.source>22</maven.compiler.source>
+		<maven.compiler.target>22</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
