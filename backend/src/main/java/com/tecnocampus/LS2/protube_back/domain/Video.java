@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.domain;
 
+import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -26,11 +28,47 @@ public class Video {
     @OneToMany
     private List<Comment> commentList;
 
-    public Video(String title, String description, String url, Long duration, List<Comment> commentList) {
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
+
+    public Video(InputVideoRecord inputVideoRecord, User user) {
+        this.title = inputVideoRecord.title();
+        this.description = inputVideoRecord.description();
+        this.duration = inputVideoRecord.duration();
+        this.user = user;
+
+        this.commentList = new ArrayList<>();
+        AddUrl();
+    }
+
+    public Video(String title, String description, Long duration, List<Comment> comments, User user){
         this.title = title;
         this.description = description;
-        this.url = url;
         this.duration = duration;
-        this.commentList = new ArrayList<>();
+        this.user = user;
+        this.commentList = comments;
+        AddUrl();
+    }
+
+    private void AddUrl(){
+        url = "http://localhost:8080/media/" + title + ".mp4";
+    }
+
+    public void addComment(Comment comment) {
+        commentList.add(comment);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Video video = (Video) o;
+        return Objects.equals(id, video.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
