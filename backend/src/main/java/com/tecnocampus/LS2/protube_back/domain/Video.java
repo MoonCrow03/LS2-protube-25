@@ -42,12 +42,12 @@ public class Video {
         AddUrl();
     }
 
-    public Video(String title, String description, Long duration, List<Comment> comments, User user){
+    public Video(String title, String description, Long duration){
         this.title = title;
         this.description = description;
         this.duration = duration;
-        this.user = user;
-        this.commentList = comments;
+        //this.user = user;
+        //this.commentList = comments;
         AddUrl();
     }
 

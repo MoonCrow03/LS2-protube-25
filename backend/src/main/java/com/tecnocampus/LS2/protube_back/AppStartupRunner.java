@@ -6,6 +6,8 @@ import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
+import com.tecnocampus.LS2.protube_back.utils.VideoJson;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -14,6 +16,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -33,19 +36,22 @@ public class AppStartupRunner implements ApplicationRunner {
     private final Boolean loadInitialData;
     private UserRepository userRepository;
     private VideoRepository videoRepository;
-    private ObjectMapper objMapper;
+    private final ObjectMapper objMapper;
 
 
-    public AppStartupRunner(Environment env) {
+    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoRepository videoRepository, UserRepository userRepository) {
         this.env = env;
         final var rootDir = env.getProperty("pro_tube.store.dir");
         this.rootPath = Paths.get(rootDir);
         loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
 
-
+        objMapper = objectMapper;
+        this.videoRepository = videoRepository;
+        this.userRepository = userRepository;
         loadVideos(rootDir);
     }
 
+    @SneakyThrows
     private void loadVideos(String path){
         File directory = new File(path);
 
@@ -62,31 +68,26 @@ public class AppStartupRunner implements ApplicationRunner {
         }
     }
 
-    private void addVideoIfNotExists(String videoFile) throws JsonProcessingException {
-        String videoTitle = videoFile.replace(".json", "");
-
-        Optional<Video> video = videoRepository.findById(videoTitle);
-        if(video.isEmpty()){
-            Map<String, Object> videoData = objMapper.readValue(videoFile, Map.class);
-
-            User user = addUserIfNotExist(videoData);
-            String title = videoData.get("title").toString();
-
-            Map<String, Object> meta = (Map<String, Object>) videoData.get("meta");
-            String desctription = meta.get("description").ToString();
-
-
-            Video Video = new Video();
+    private void addVideoIfNotExists(String videoFile) {
+        File file = new File(rootPath.toString(), videoFile);
+        VideoJson videoJson = null;
+        try {
+            videoJson = objMapper.readValue(file, VideoJson.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
+        // Crear una entidad Video con los datos parseados
+        Video video = new Video(
+                videoJson.getTitle(),
+                videoJson.getTitle(),
+                videoJson.getDuration()
+        );
+
+        videoRepository.save(video);
     }
 
-    private User addUserIfNotExist(Map<String, Object> data) {
 
-
-
-        User user = new User();
-    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
