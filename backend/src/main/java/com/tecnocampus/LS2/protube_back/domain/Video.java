@@ -33,6 +33,4 @@ public class Video {
         this.duration = duration;
         this.commentList = new ArrayList<>();
     }
-
-
 }
