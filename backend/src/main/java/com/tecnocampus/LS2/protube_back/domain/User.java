@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "PROTUBE_USERS")
 @NoArgsConstructor
 @Getter
 @Setter

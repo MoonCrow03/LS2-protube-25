@@ -51,8 +51,12 @@ public class Video {
         AddUrl();
     }
 
-    private void AddUrl(){
-        url = "http://localhost:8080/media/" + title + ".mp4";
+    @PostPersist
+    private void AddUrl() {
+        // Ensure id is greater than 0 to avoid negative URLs.
+        if (id != null && id > 0) {
+            url = "http://localhost:8080/media/" + (id - 1) + ".mp4";
+        }
     }
 
     public void addComment(Comment comment) {
