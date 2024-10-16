@@ -6,12 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 
 @Entity
+@Table(name = "pt_video")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -25,20 +24,10 @@ public class Video {
     private String url;
     private Long duration;
 
-    @OneToMany
-    private List<Comment> commentList;
-
-    @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
-
-    public Video(InputVideoRecord inputVideoRecord, User user) {
+    public Video(InputVideoRecord inputVideoRecord) {
         this.title = inputVideoRecord.title();
         this.description = inputVideoRecord.description();
         this.duration = inputVideoRecord.duration();
-        this.user = user;
-
-        this.commentList = new ArrayList<>();
         AddUrl();
     }
 
@@ -53,10 +42,6 @@ public class Video {
 
     private void AddUrl(){
         url = "http://localhost:8080/media/" + title + ".mp4";
-    }
-
-    public void addComment(Comment comment) {
-        commentList.add(comment);
     }
 
     @Override

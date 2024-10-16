@@ -1,6 +1,5 @@
 package com.tecnocampus.LS2.protube_back.api;
 
-import com.tecnocampus.LS2.protube_back.dto.UserDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import com.tecnocampus.LS2.protube_back.services.VideoService;

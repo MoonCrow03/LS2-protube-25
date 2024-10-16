@@ -1,20 +1,11 @@
 package com.tecnocampus.LS2.protube_back.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
-import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class VideoService {
@@ -22,12 +13,8 @@ public class VideoService {
     @Autowired
     private VideoRepository videoRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     public VideoDTO createVideo(InputVideoRecord inputVideo) {
-        User user = userRepository.findByUsername(inputVideo.username()).orElseThrow(() -> new RuntimeException("User not found"));
-        Video video = new Video(inputVideo, user);
+        Video video = new Video(inputVideo);
 
         videoRepository.save(video);
         return new VideoDTO(video);
