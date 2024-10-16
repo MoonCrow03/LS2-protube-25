@@ -1,6 +1,7 @@
 package com.tecnocampus.LS2.protube_back.dto;
 
 import com.tecnocampus.LS2.protube_back.domain.Comment;
+import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class VideoDTO {
     private String url;
     private Long duration;
     private List<Comment> commentList;
+    private User user;
 
     public VideoDTO(Video video) {
         this.id = video.getId();
@@ -26,6 +28,7 @@ public class VideoDTO {
         this.description = video.getDescription();
         this.url = video.getUrl();
         this.duration = video.getDuration();
+        this.user = video.getUser();
 
         this.commentList = new ArrayList<>(video.getCommentList());
     }
