@@ -1,15 +1,12 @@
 package com.tecnocampus.LS2.protube_back.api;
 
-import com.tecnocampus.LS2.protube_back.dto.UserDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,15 +29,14 @@ public class VideoRestController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.FOUND)
     public void deleteVideo(@PathVariable Long id) {
         videoServices.deleteVideo(id);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<String>> getVideoList() {
-        //List<String> videos = videoServices.getVideos();
-        //return ResponseEntity.ok(videos);
-        //falta implementar
-        return ResponseEntity.ok(new ArrayList<>());
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<VideoDTO> getVideoList() {
+        return videoServices.getAllVideos();
     }
 }
