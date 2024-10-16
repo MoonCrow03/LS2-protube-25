@@ -13,8 +13,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VideoService {
@@ -36,6 +38,14 @@ public class VideoService {
     public VideoDTO getVideo(String videoTile) {
         Video video = videoRepository.findByTitle(videoTile).orElseThrow(() -> new RuntimeException("Video not found"));
         return new VideoDTO(video);
+    }
+
+    public List<VideoDTO> getAllVideos() {
+        List<Video> videos = videoRepository.findAll();
+
+        return videos.stream()
+                .map(VideoDTO::new)
+                .collect(Collectors.toList());
     }
 
     public void deleteVideo(Long videoId){
