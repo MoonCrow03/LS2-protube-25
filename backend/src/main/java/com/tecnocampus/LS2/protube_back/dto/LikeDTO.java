@@ -1,4 +1,4 @@
-package com.tecnocampus.LS2.protube_back.DTO;
+package com.tecnocampus.LS2.protube_back.dto;
 
 import com.tecnocampus.LS2.protube_back.domain.entityId.LikeId;
 import com.tecnocampus.LS2.protube_back.domain.Like;
