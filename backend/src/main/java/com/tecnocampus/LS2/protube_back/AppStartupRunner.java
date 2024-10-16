@@ -14,6 +14,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class AppStartupRunner implements ApplicationRunner {
         objMapper = objectMapper;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        addDefaultUser();
         loadVideos(rootDir);
     }
 
@@ -68,9 +70,13 @@ public class AppStartupRunner implements ApplicationRunner {
         }
     }
 
-    private void addVideoIfNotExists(String videoFile) {
+    @Transactional
+    public void addVideoIfNotExists(String videoFile) {
         File file = new File(rootPath.toString(), videoFile);
         VideoJson videoJson = null;
+
+        User user = userRepository.findByUsername("protube-admin").orElseThrow(() -> new RuntimeException("User not found"));
+
         try {
             videoJson = objMapper.readValue(file, VideoJson.class);
         } catch (IOException e) {
@@ -80,14 +86,22 @@ public class AppStartupRunner implements ApplicationRunner {
         // Crear una entidad Video con los datos parseados
         Video video = new Video(
                 videoJson.getTitle(),
-                videoJson.getTitle(),
-                videoJson.getDuration()
+                videoJson.getMeta().getDescription(),
+                videoJson.getDuration(),
+                user
         );
 
+//        user.addVideo(video);
+
         videoRepository.save(video);
+        userRepository.save(user);
     }
 
-
+    @Transactional
+    public void addDefaultUser() {
+        User user = new User("protube-admin", "admin");
+        userRepository.save(user);
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

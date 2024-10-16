@@ -21,6 +21,7 @@ public class Video {
     private Long id;
 
     private String title;
+    @Column(length = 10000)
     private String description;
     private String url;
     private Long duration;
@@ -42,11 +43,11 @@ public class Video {
         AddUrl();
     }
 
-    public Video(String title, String description, Long duration){
+    public Video(String title, String description, Long duration, User user) {
         this.title = title;
         this.description = description;
         this.duration = duration;
-        //this.user = user;
+        this.user = user;
         //this.commentList = comments;
         AddUrl();
     }
