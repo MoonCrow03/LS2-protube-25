@@ -30,6 +30,6 @@ public class VideoDTO {
         this.duration = video.getDuration();
         this.user = video.getUser();
 
-        this.commentList = new ArrayList<>(video.getCommentList());
+        this.commentList = video.getCommentList();
     }
 }

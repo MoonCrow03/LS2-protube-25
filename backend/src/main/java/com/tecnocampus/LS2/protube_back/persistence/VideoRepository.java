@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface VideoRepository extends JpaRepository<Video, String> {
+public interface VideoRepository extends JpaRepository<Video, Long> {
     Optional<Video> findByTitle(String title);
     void deleteById(Long id);
 }
