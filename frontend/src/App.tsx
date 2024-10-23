@@ -1,3 +1,4 @@
+/*
 import logo from './assets/logo.svg';
 import './App.css';
 
@@ -23,6 +24,18 @@ function App() {
       </header>
     </div>
   );
-}
+}*/
+
+import React from 'react';
+import VideoList from './components/VideoList';
+
+const App: React.FC = () => {
+  return (
+      <div className="App">
+        <h1>Mi YouTube Local</h1>
+        <VideoList />
+      </div>
+  );
+};
 
 export default App;
