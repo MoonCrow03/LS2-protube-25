@@ -23,7 +23,8 @@ public class Video {
     private String title;
     @Column(length = 10000)
     private String description;
-    private String url;
+    private String videoUrl;
+    private String thumbnailUrl;
     private Long duration;
 
     @OneToMany
@@ -40,7 +41,7 @@ public class Video {
         this.user = user;
 
         this.commentList = new ArrayList<>();
-        AddUrl();
+        AddUrls();
     }
 
     public Video(String title, String description, Long duration, User user) {
@@ -48,15 +49,16 @@ public class Video {
         this.description = description;
         this.duration = duration;
         this.user = user;
-        //this.commentList = comments;
-        AddUrl();
+
+        this.commentList = new ArrayList<>();
+        AddUrls();
     }
 
     @PostPersist
-    private void AddUrl() {
-        // Ensure id is greater than 0 to avoid negative URLs.
+    private void AddUrls() {
         if (id != null && id > 0) {
-            url = "http://localhost:8080/media/" + (id - 1) + ".mp4";
+            videoUrl = "http://localhost:8080/media/" + (id - 1) + ".mp4";
+            thumbnailUrl = "http://localhost:8080/media/" + (id - 1) + ".webp";
         }
     }
 
