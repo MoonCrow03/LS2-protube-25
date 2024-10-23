@@ -24,6 +24,7 @@ public class Comment {
     @ManyToOne
     private Video video;
 
+    @Column(length = 10000)
     private String content;
 
     private LocalDateTime timestamp;
