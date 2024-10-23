@@ -1,12 +1,12 @@
 package com.tecnocampus.LS2.protube_back;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tecnocampus.LS2.protube_back.domain.User;
-import com.tecnocampus.LS2.protube_back.domain.Video;
-import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
-import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
+import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
+import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.services.UserService;
+import com.tecnocampus.LS2.protube_back.services.VideoService;
 import com.tecnocampus.LS2.protube_back.utils.VideoJson;
+import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,49 +22,44 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class AppStartupRunner implements ApplicationRunner {
-    private static final Logger LOG =
-            LoggerFactory.getLogger(AppStartupRunner.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppStartupRunner.class);
 
-    // Example variables from our implementation. 
-    // Feel free to adapt them to your needs
     private final Environment env;
     private final Path rootPath;
     private final Boolean loadInitialData;
-    private UserRepository userRepository;
-    private VideoRepository videoRepository;
+    private final VideoService videoService;
+    private final UserService userService;
     private final ObjectMapper objMapper;
 
-
-    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoRepository videoRepository, UserRepository userRepository) {
+    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoService videoService, UserService userService) {
         this.env = env;
         final var rootDir = env.getProperty("pro_tube.store.dir");
         this.rootPath = Paths.get(rootDir);
-        loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
-
-        objMapper = objectMapper;
-        this.videoRepository = videoRepository;
-        this.userRepository = userRepository;
-        addDefaultUser();
-        loadVideos(rootDir);
+        this.loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
+        this.objMapper = objectMapper;
+        this.videoService = videoService;
+        this.userService = userService;
     }
 
-    @SneakyThrows
-    private void loadVideos(String path){
+    @PostConstruct
+    @Transactional
+    public void init() {
+        addDefaultUser();
+        loadVideos(rootPath.toString());
+    }
+
+    @Transactional
+    public void loadVideos(String path) {
         File directory = new File(path);
 
         if (directory.exists() && directory.isDirectory()) {
-            // List JSON files in the directory
             String[] files = directory.list((dir, name) -> name.endsWith(".json"));
 
             if (files != null) {
                 List<String> videoFiles = Arrays.asList(files);
-
-                // Add to database if videos are not already there
                 videoFiles.forEach(this::addVideoIfNotExists);
             }
         }
@@ -73,9 +68,7 @@ public class AppStartupRunner implements ApplicationRunner {
     @Transactional
     public void addVideoIfNotExists(String videoFile) {
         File file = new File(rootPath.toString(), videoFile);
-        VideoJson videoJson = null;
-
-        User user = userRepository.findByUsername("protube-admin").orElseThrow(() -> new RuntimeException("User not found"));
+        VideoJson videoJson;
 
         try {
             videoJson = objMapper.readValue(file, VideoJson.class);
@@ -83,28 +76,24 @@ public class AppStartupRunner implements ApplicationRunner {
             throw new RuntimeException(e);
         }
 
-        // Crear una entidad Video con los datos parseados
-        Video video = new Video(
+        InputVideoRecord inputVidRecord = new InputVideoRecord(
                 videoJson.getTitle(),
                 videoJson.getMeta().getDescription(),
                 videoJson.getDuration(),
-                user
+                "protube-admin"
         );
 
-//        user.addVideo(video);
-
-        videoRepository.save(video);
-        userRepository.save(user);
+        videoService.createVideo(inputVidRecord);
     }
 
     @Transactional
     public void addDefaultUser() {
-        User user = new User("protube-admin", "admin");
-        userRepository.save(user);
+        InputUserRecord inputUser = new InputUserRecord("protube-admin", "12345");
+        userService.createUser(inputUser);
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         // Should your backend perform any task during the bootstrap, do it here
     }
 }
