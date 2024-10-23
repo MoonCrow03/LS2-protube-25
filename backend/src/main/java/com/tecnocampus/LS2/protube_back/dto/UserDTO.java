@@ -16,14 +16,14 @@ import java.util.List;
 @Setter
 public class UserDTO {
     private String username;
-    private List<Video> uploadedVideos = new ArrayList<>();
-    private List<Like> likedVideos = new ArrayList<>();
+    private List<VideoDTO> uploadedVideos = new ArrayList<>();
+    private List<LikeDTO> likedVideos = new ArrayList<>();
     private String password;
 
     public UserDTO(User user){
         this.username = user.getUsername();
-        this.uploadedVideos = user.getUploadedVideos();
-        this.likedVideos = user.getLikedVideos();
+        this.uploadedVideos = user.getUploadedVideos().stream().map(VideoDTO::new).toList();
+        this.likedVideos = user.getLikedVideos().stream().map(LikeDTO::new).toList();
         this.password = user.getPassword();
     }
 

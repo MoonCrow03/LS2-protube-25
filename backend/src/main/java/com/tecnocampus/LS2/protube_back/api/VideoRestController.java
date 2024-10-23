@@ -27,7 +27,7 @@ public class VideoRestController {
         return videoServices.createVideo(video);
     }
 
-    @GetMapping("/{videoTitle}")
+    @GetMapping("/title/{videoTitle}")
     @ResponseStatus(HttpStatus.FOUND)
     public VideoDTO getVideo(@PathVariable String videoTitle) {
         return videoServices.getVideo(videoTitle);

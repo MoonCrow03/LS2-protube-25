@@ -19,7 +19,7 @@ public class VideoDTO {
     private String videoUrl;
     private String thumbnailUrl;
     private Long duration;
-    private List<Comment> commentList;
+    private List<CommentDTO> commentList;
     private User user;
 
     public VideoDTO(Video video) {
@@ -31,6 +31,6 @@ public class VideoDTO {
         this.duration = video.getDuration();
         this.user = video.getUser();
 
-        this.commentList = video.getCommentList();
+        this.commentList = video.getCommentList().stream().map(CommentDTO::new).toList();
     }
 }
