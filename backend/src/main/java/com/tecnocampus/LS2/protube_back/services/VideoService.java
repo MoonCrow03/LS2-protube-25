@@ -11,6 +11,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,11 +28,14 @@ public class VideoService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public VideoDTO createVideo(InputVideoRecord inputVideo) {
         User user = userRepository.findByUsername(inputVideo.username()).orElseThrow(() -> new RuntimeException("User not found"));
         Video video = new Video(inputVideo, user);
+        user.addVideo(video);
 
         videoRepository.save(video);
+        userRepository.save(user);
         return new VideoDTO(video);
     }
 
@@ -56,8 +60,6 @@ public class VideoService {
     public void deleteVideo(Long videoId){
         videoRepository.deleteById(videoId);
     }
-
-
 }
 
 
