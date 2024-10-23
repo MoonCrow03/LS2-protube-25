@@ -26,12 +26,20 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/images/**", "/videos/**", "/users/**").permitAll()
+                        .requestMatchers("/", "/h2-console/**", "/images/**", "/videos/**", "/users/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(withDefaults())  // OAuth2 Login
                 .logout(logout -> logout
                         .addLogoutHandler(logoutHandler()));
+
+        http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")) // Disable CSRF protection for the H2 console
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions
+                                .sameOrigin())); // Allow frames from the same origin (required for H2 console)
+
         return http.build();
 
     }
