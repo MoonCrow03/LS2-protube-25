@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface VideoRepository extends JpaRepository<Video, Long> {
     Optional<Video> findByTitle(String title);
     void deleteById(Long id);
+    Optional<Video> findById(Long id);
 }

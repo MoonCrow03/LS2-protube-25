@@ -1,17 +1,24 @@
 package com.tecnocampus.LS2.protube_back.api;
 
+import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.UserDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
+import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserRestController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,5 +36,12 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable String username){
         userService.deleteUser(username);
+    }
+
+    //COMMENTS
+    @GetMapping("/comments/{username}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<CommentDTO> getUserComments(@PathVariable String username){
+        return commentService.getCommentsFromUser(username);
     }
 }

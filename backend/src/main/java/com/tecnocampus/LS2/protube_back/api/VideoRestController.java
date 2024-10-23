@@ -1,7 +1,9 @@
 package com.tecnocampus.LS2.protube_back.api;
 
+import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ public class VideoRestController {
     @Autowired
     private VideoService videoServices;
 
+    @Autowired
+    private CommentService commentService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VideoDTO createVideo(@RequestBody InputVideoRecord video) {
@@ -23,13 +28,19 @@ public class VideoRestController {
     }
 
     @GetMapping("/{videoTitle}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.FOUND)
     public VideoDTO getVideo(@PathVariable String videoTitle) {
         return videoServices.getVideo(videoTitle);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{videoId}")
     @ResponseStatus(HttpStatus.FOUND)
+    public VideoDTO getVideo(@PathVariable Long videoId) {
+        return videoServices.getVideoById(videoId);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteVideo(@PathVariable Long id) {
         videoServices.deleteVideo(id);
     }
@@ -39,4 +50,12 @@ public class VideoRestController {
     public List<VideoDTO> getVideoList() {
         return videoServices.getAllVideos();
     }
+
+    //COMMENTS
+    @GetMapping("/comments/{videoId}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<CommentDTO> getVideoComments(@PathVariable Long videoId) {
+        return commentService.getCommentsFromVideo(videoId);
+    }
+
 }
