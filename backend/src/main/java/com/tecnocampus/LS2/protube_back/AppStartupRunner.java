@@ -1,13 +1,15 @@
 package com.tecnocampus.LS2.protube_back;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
+import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.UserService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import com.tecnocampus.LS2.protube_back.utils.VideoJson;
 import jakarta.annotation.PostConstruct;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -32,9 +34,10 @@ public class AppStartupRunner implements ApplicationRunner {
     private final Boolean loadInitialData;
     private final VideoService videoService;
     private final UserService userService;
+    private final CommentService commentService;
     private final ObjectMapper objMapper;
 
-    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoService videoService, UserService userService) {
+    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoService videoService, UserService userService, CommentService commentService) {
         this.env = env;
         final var rootDir = env.getProperty("pro_tube.store.dir");
         this.rootPath = Paths.get(rootDir);
@@ -42,12 +45,13 @@ public class AppStartupRunner implements ApplicationRunner {
         this.objMapper = objectMapper;
         this.videoService = videoService;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     @PostConstruct
     @Transactional
     public void init() {
-        addDefaultUser();
+        addDefaultUsers();
         loadVideos(rootPath.toString());
     }
 
@@ -83,13 +87,26 @@ public class AppStartupRunner implements ApplicationRunner {
                 "protube-admin"
         );
 
-        videoService.createVideo(inputVidRecord);
+        VideoDTO videoDTO = videoService.createVideo(inputVidRecord);
+
+        for (VideoJson.F_Comment comment : videoJson.getMeta().getComments()) {
+            InputCommentRecord inputCommentRecord = new InputCommentRecord(
+                    "protube-comment",
+                    videoDTO.getId(),
+                    comment.getText()
+            );
+
+            commentService.createComment(inputCommentRecord);
+        }
     }
 
     @Transactional
-    public void addDefaultUser() {
+    public void addDefaultUsers() {
         InputUserRecord inputUser = new InputUserRecord("protube-admin", "12345");
         userService.createUser(inputUser);
+
+        InputUserRecord inputUser2 = new InputUserRecord("protube-comment", "12345");
+        userService.createUser(inputUser2);
     }
 
     @Override
