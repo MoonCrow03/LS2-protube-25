@@ -40,6 +40,11 @@ public class VideoService {
         return new VideoDTO(video);
     }
 
+    public VideoDTO getVideoById(Long videoId) {
+        Video video = videoRepository.findById(videoId).orElseThrow(() -> new RuntimeException("Video not found"));
+        return new VideoDTO(video);
+    }
+
     public List<VideoDTO> getAllVideos() {
         List<Video> videos = videoRepository.findAll();
 

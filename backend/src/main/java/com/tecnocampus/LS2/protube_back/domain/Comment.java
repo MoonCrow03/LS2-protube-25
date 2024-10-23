@@ -30,6 +30,8 @@ public class Comment {
 
     public Comment(User user, Video video, String content){
         this.content = content;
+        this.user = user;
+        this.video = video;
         timestamp = LocalDateTime.now();
     }
 
