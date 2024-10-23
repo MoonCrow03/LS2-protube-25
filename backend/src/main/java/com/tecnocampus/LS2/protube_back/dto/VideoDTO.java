@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,7 +16,8 @@ public class VideoDTO {
     private Long id;
     private String title;
     private String description;
-    private String url;
+    private String videoUrl;
+    private String thumbnailUrl;
     private Long duration;
     private List<Comment> commentList;
     private User user;
@@ -26,7 +26,8 @@ public class VideoDTO {
         this.id = video.getId();
         this.title = video.getTitle();
         this.description = video.getDescription();
-        this.url = video.getUrl();
+        this.videoUrl = video.getVideoUrl();
+        this.thumbnailUrl = video.getThumbnailUrl();
         this.duration = video.getDuration();
         this.user = video.getUser();
 
