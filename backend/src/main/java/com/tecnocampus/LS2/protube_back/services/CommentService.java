@@ -8,6 +8,7 @@ import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.persistence.CommentRepository;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,14 @@ public class CommentService {
     VideoRepository videoRepository;
 
 
+    @Transactional
     public CommentDTO createComment(InputCommentRecord inputCommenet){
         User user = userRepository.findByUsername(inputCommenet.username()).orElseThrow();
         Video video = videoRepository.findById(inputCommenet.videoId()).orElseThrow();
         Comment comment = new Comment(user, video, inputCommenet.content());
-        user.addComment(comment);
         video.addComment(comment);
-        userRepository.save(user);
-        videoRepository.save(video);
         commentRepository.save(comment);
+        videoRepository.save(video);
         return new CommentDTO(comment);
     }
 

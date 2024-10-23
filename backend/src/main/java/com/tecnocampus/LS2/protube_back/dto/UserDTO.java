@@ -18,14 +18,12 @@ public class UserDTO {
     private String username;
     private List<Video> uploadedVideos = new ArrayList<>();
     private List<Like> likedVideos = new ArrayList<>();
-    private List<Comment> comments = new ArrayList<>();
     private String password;
 
     public UserDTO(User user){
         this.username = user.getUsername();
         this.uploadedVideos = user.getUploadedVideos();
         this.likedVideos = user.getLikedVideos();
-        this.comments = user.getComments();
         this.password = user.getPassword();
     }
 

@@ -26,9 +26,6 @@ public class User {
     private List<Video> uploadedVideos;
 
     @OneToMany
-    private List<Comment> comments;
-
-    @OneToMany
     private List<Like> likedVideos;
 
     public User(InputUserRecord inputUserRecord) {
@@ -37,7 +34,6 @@ public class User {
 
         this.uploadedVideos = new ArrayList<>();
         this.likedVideos = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public User(String username, String password){
@@ -46,7 +42,6 @@ public class User {
 
         this.uploadedVideos = new ArrayList<>();
         this.likedVideos = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public void addVideo(Video video) {
@@ -56,8 +51,6 @@ public class User {
     public void addLike(Like like) {
         likedVideos.add(like);
     }
-
-    public void addComment(Comment comment) {comments.add(comment);}
 
     @Override
     public boolean equals(Object o) {
