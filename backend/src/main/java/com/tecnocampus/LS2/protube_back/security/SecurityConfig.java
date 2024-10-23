@@ -31,11 +31,9 @@ public class SecurityConfig {
                 )
                 .oauth2Login(withDefaults())  // OAuth2 Login
                 .logout(logout -> logout
-                        .addLogoutHandler(logoutHandler()));
-
-        http
+                        .addLogoutHandler(logoutHandler()))
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")) // Disable CSRF protection for the H2 console
+                        .ignoringRequestMatchers("/h2-console/**", "/**")) // Disable CSRF protection for the H2 console
                 .headers(headers -> headers
                         .frameOptions(frameOptions -> frameOptions
                                 .sameOrigin())); // Allow frames from the same origin (required for H2 console)
