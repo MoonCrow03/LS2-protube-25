@@ -5,13 +5,13 @@ interface Video {
     id: number;
     title: string;
     url: string;
-    thumbnail: string;
 }
 
 const VideoList: React.FC = () => {
     const [videos, setVideos] = useState<Video[]>([]);
 
     useEffect(() => {
+        // Llamada al backend para obtener la lista de videos
         fetch('http://localhost:8080/videos/list')
             .then(response => response.json())
             .then((data: Video[]) => setVideos(data))
@@ -25,7 +25,6 @@ const VideoList: React.FC = () => {
                 {videos.map(video => (
                     <div key={video.id}>
                         <h3>{video.title}</h3>
-                        <img src={`http://localhost:8080/media/${video.thumbnail}`} alt={video.title} />
                         <VideoPlayer url={video.url} />
                     </div>
                 ))}
@@ -35,3 +34,4 @@ const VideoList: React.FC = () => {
 };
 
 export default VideoList;
+
