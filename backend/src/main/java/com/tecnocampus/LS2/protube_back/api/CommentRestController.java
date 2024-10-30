@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 public class CommentRestController {
 
     @Autowired
