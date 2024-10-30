@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './VideoList.css';
 
 interface Video {
     id: number;
@@ -23,12 +24,16 @@ const VideoList: React.FC = () => {
     return (
         <div>
             <h1>Lista de Videos</h1>
-            <div>
+            <div className="video-list"> {/* Aplica la clase CSS para el contenedor de la cuadrícula */}
                 {videos.map(video => (
-                    <div key={video.id}>
+                    <div className="video-item" key={video.id}> {/* Aplica la clase CSS para cada video */}
                         <Link to={`/video/${video.id}`} style={{ color: 'black', textDecoration: 'none' }}>
-                            <img src={video.thumbnailUrl} alt={video.title} width="240" height="135"/>
-                            <h3>{video.title}</h3>
+                            <img
+                                className="video-thumbnail" // Aplica la clase CSS a la imagen
+                                src={video.thumbnailUrl}
+                                alt={video.title}
+                            />
+                            <h3 className="video-title">{video.title}</h3> {/* Aplica la clase CSS al título */}
                         </Link>
                     </div>
                 ))}
