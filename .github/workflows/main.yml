@@ -1,0 +1,49 @@
+name: Pull Request CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js for frontend
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Set up Java for backend
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Install Maven Wrapper
+        working-directory: backend
+        run: mvn -N io.takari:maven:wrapper
+
+      - name: Build backend
+        working-directory: backend
+        run: ./mvnw clean install -Dmaven.test.skip
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test
+
+      - name: Run backend tests
+        working-directory: backend
+        run: ./mvnw test
