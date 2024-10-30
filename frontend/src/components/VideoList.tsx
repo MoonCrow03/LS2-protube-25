@@ -1,7 +1,5 @@
-// components/VideoList.tsx
 import React, { useEffect, useState } from 'react';
-import Video from './Video';
-import VideoPlayer from './VideoPlayer';
+import { Link } from 'react-router-dom';
 
 interface Video {
     id: number;
@@ -14,7 +12,6 @@ interface Video {
 
 const VideoList: React.FC = () => {
     const [videos, setVideos] = useState<Video[]>([]);
-    const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
     useEffect(() => {
         fetch('http://localhost:8080/api/videos/list')
@@ -23,32 +20,19 @@ const VideoList: React.FC = () => {
             .catch(error => console.error('Error fetching videos:', error));
     }, []);
 
-    const handleVideoSelect = (id: number) => {
-        const video = videos.find(video => video.id === id);
-        if (video) setSelectedVideo(video);
-    };
-
     return (
         <div>
             <h1>Lista de Videos</h1>
-            {selectedVideo ? (
-                <div>
-                    <button onClick={() => setSelectedVideo(null)}>Volver a la lista</button>
-                    <VideoPlayer url={selectedVideo.videoUrl} title={selectedVideo.title} />
-                </div>
-            ) : (
-                <div>
-                    {videos.map(video => (
-                        <Video
-                            key={video.id}
-                            id={video.id}
-                            title={video.title}
-                            thumbnailUrl={video.thumbnailUrl}
-                            onVideoSelect={handleVideoSelect}
-                        />
-                    ))}
-                </div>
-            )}
+            <div>
+                {videos.map(video => (
+                    <div key={video.id}>
+                        <Link to={`/video/${video.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+                            <img src={video.thumbnailUrl} alt={video.title} width="240" height="135"/>
+                            <h3>{video.title}</h3>
+                        </Link>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
