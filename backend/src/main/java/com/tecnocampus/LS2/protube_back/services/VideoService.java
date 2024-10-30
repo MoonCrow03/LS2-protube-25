@@ -3,6 +3,7 @@ package com.tecnocampus.LS2.protube_back.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
+import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
@@ -44,16 +45,16 @@ public class VideoService {
         return new VideoDTO(video);
     }
 
-    public VideoDTO getVideoById(Long videoId) {
+    public BasicVideoDTO getVideoById(Long videoId) {
         Video video = videoRepository.findById(videoId).orElseThrow(() -> new RuntimeException("Video not found"));
-        return new VideoDTO(video);
+        return new BasicVideoDTO(video);
     }
 
-    public List<VideoDTO> getAllVideos() {
+    public List<BasicVideoDTO> getAllVideos() {
         List<Video> videos = videoRepository.findAll();
 
         return videos.stream()
-                .map(VideoDTO::new)
+                .map(BasicVideoDTO::new)
                 .collect(Collectors.toList());
     }
 

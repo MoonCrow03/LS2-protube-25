@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.api;
 
+import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/videos")
+@RequestMapping("/api/videos")
 public class VideoRestController {
 
     @Autowired
@@ -33,9 +34,11 @@ public class VideoRestController {
         return videoServices.getVideo(videoTitle);
     }
 
+
+
     @GetMapping("/{videoId}")
     @ResponseStatus(HttpStatus.FOUND)
-    public VideoDTO getVideo(@PathVariable Long videoId) {
+    public BasicVideoDTO getVideo(@PathVariable Long videoId) {
         return videoServices.getVideoById(videoId);
     }
 
@@ -47,7 +50,7 @@ public class VideoRestController {
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.FOUND)
-    public List<VideoDTO> getVideoList() {
+    public List<BasicVideoDTO> getVideoList() {
         return videoServices.getAllVideos();
     }
 
