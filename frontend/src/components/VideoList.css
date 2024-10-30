@@ -1,0 +1,25 @@
+.video-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Ajusta el tamaño de las columnas */
+    gap: 16px; /* Espacio entre los videos */
+    padding: 16px; /* Espacio alrededor de la cuadrícula */
+}
+
+.video-item {
+    border: 1px solid #ccc; /* Borde alrededor de cada video */
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que no se desborde el contenido */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar un efecto de profundidad */
+    text-align: center; /* Centra el texto dentro de cada video */
+}
+
+.video-thumbnail {
+    width: 100%; /* Asegura que la miniatura ocupe todo el ancho */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+.video-title {
+    padding: 8px; /* Espacio alrededor del título */
+    font-size: 16px; /* Tamaño del texto del título */
+    font-weight: bold; /* Texto en negrita */
+}
