@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './video-title.css';
+
 
 interface VideoPlayerProps {
     url?: string;
@@ -21,13 +23,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
 
     return (
         <div>
-            <video width="640" height="360" controls>
-                <source src={video.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag
-            </video>
-            <h4>{video.title}</h4>
+            <div>
+                <video width="640" height="360" controls>
+                    <source src={video.videoUrl} type="video/mp4"/>
+                    Your browser does not support the video tag
+                </video>
+            </div>
+            <div className="video-title">
+                <h4>{video.title}</h4>
+            </div>
         </div>
-    );
+);
 };
 
 export default VideoPlayer;
