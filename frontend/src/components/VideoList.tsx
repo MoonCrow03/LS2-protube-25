@@ -34,7 +34,7 @@ const VideoList: React.FC = () => {
             {selectedVideo ? (
                 <div>
                     <button onClick={() => setSelectedVideo(null)}>Volver a la lista</button>
-                    <VideoPlayer url={selectedVideo.videoUrl} />
+                    <VideoPlayer url={selectedVideo.videoUrl} title={selectedVideo.title} />
                 </div>
             ) : (
                 <div>
