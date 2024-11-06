@@ -6,6 +6,7 @@ import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class VideoRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VideoDTO createVideo(@RequestBody InputVideoRecord video) {
+    public VideoDTO createVideo(@Valid @RequestBody InputVideoRecord video) {
         return videoServices.createVideo(video);
     }
 
@@ -33,8 +34,6 @@ public class VideoRestController {
     public VideoDTO getVideo(@PathVariable String videoTitle) {
         return videoServices.getVideo(videoTitle);
     }
-
-
 
     @GetMapping("/{videoId}")
     @ResponseStatus(HttpStatus.FOUND)

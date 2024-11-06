@@ -2,6 +2,9 @@ package com.tecnocampus.LS2.protube_back.domain;
 
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +22,11 @@ import java.util.Objects;
 public class User {
 
     @Id
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
+
+    @NotNull(message = "password cannot be null")
+    @Size(min = 3, message = "password must be at least 3 characters")
     private String password;
 
     @OneToMany
