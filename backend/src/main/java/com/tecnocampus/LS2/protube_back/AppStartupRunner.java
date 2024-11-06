@@ -64,9 +64,21 @@ public class AppStartupRunner implements ApplicationRunner {
 
             if (files != null) {
                 List<String> videoFiles = Arrays.asList(files);
+
+                videoFiles.sort((file1, file2) -> {
+                    Integer num1 = extractNumber(file1);
+                    Integer num2 = extractNumber(file2);
+                    return num1.compareTo(num2);
+                });
+
                 videoFiles.forEach(this::addVideoIfNotExists);
             }
         }
+    }
+
+    private Integer extractNumber(String fileName) {
+        String number = fileName.replaceAll("\\D+", ""); // Remove non-numeric characters
+        return number.isEmpty() ? 0 : Integer.parseInt(number); // Default to 0 if no number is found
     }
 
     @Transactional
