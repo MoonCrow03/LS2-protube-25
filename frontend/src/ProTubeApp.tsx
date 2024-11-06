@@ -9,7 +9,7 @@ const ProTubeApp: React.FC = () => {
     return (
         <Router>
             <div className="App">
-                <h1>Mi YouTube Local</h1>
+                <h1>PRO TUBE</h1>
                 <Routes>
                     <Route path="/" element={<VideoList />} />
                     <Route path="/video/:id" element={<VideoPlayerWrapper />} />
