@@ -20,9 +20,10 @@
 }
 
 .video-thumbnail {
-    width: 100%;
-    height: auto;
-    transition: opacity 0.3s ease; /* Transición para el overlay */
+    width: 100%; /* Asegura que la miniatura ocupe todo el ancho disponible */
+    height: 200px; /* Establece una altura fija para todas las miniaturas */
+    object-fit: cover; /* Asegura que la imagen llene el contenedor sin distorsionarse, pero recortando si es necesario */
+    transition: opacity 0.3s ease;
 }
 
 .video-item:hover .video-thumbnail {
