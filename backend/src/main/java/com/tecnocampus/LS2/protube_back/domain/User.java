@@ -2,6 +2,7 @@ package com.tecnocampus.LS2.protube_back.domain;
 
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,11 @@ public class User {
     private String username;
     private String password;
 
+    @Email
+    private String email;
+
+    private String auth0Id;
+
     @OneToMany
     private List<Video> uploadedVideos;
 
@@ -31,6 +37,7 @@ public class User {
     public User(InputUserRecord inputUserRecord) {
         this.username = inputUserRecord.username();
         this.password = inputUserRecord.password();
+        this.email = inputUserRecord.email();
 
         this.uploadedVideos = new ArrayList<>();
         this.likedVideos = new ArrayList<>();
