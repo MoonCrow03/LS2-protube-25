@@ -30,7 +30,7 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
     // Method to save or update user data in the local database
-    public User saveOrUpdateUser(String auth0Id, String email, String name) {
+    public User saveOrUpdateUser(String auth0Id, String email, String name, String picture) {
         // Check if the user already exists by Auth0 ID
         User user = userRepository.findByAuth0Id(auth0Id);
 
@@ -40,6 +40,7 @@ public class UserService {
             user.setAuth0Id(auth0Id);
             user.setEmail(email);
             user.setUsername(name);
+            user.setPicture(picture);
             userRepository.save(user);  // Save new user to the database
         } else {
             // If the user exists, update their information (optional)
