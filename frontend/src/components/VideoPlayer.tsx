@@ -8,42 +8,41 @@ interface VideoPlayerProps {
     title?: string;
 }
 
-type VideoState = 'loading' | 'error' | 'success';
+type VideoStateType = { state: 'loading' } | { state: 'error', message: string } | { state: 'success', video: { title: string; videoUrl: string } }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = () => {
     const { id } = useParams<{ id: string }>();
-    const [video, setVideo] = useState<{ title: string; videoUrl: string } | null>(null);
-    const [status, setStatus] = useState<VideoState>('loading');
+    const [state, setState] = useState<VideoStateType>({ state: 'loading' });
 
     useEffect(() => {
-        setStatus('loading');
+        setState({ state: 'loading' });
         fetch(`http://localhost:8080/api/videos/${id}`)
-            .then(response => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                setVideo({ title: data.title, videoUrl: data.videoUrl });
-                setStatus('success');
+                setState({ state: 'success', video: { title: data.title, videoUrl: data.videoUrl });
             })
             .catch(error => {
                 console.error('Error fetching video:', error);
-                setStatus('error');
+                setState({ state: 'error', message: error });
             });
     }, [id]);
 
-    if (status === 'loading') return <div>Loading...</div>;
-
-    if (status === 'error') return <div>Error loading video. Please try again later.</div>;
-
-    return (
-        <div>
-            <video width="640" height="360" controls>
-                <source src={video?.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag
-            </video>
-            <h4>{video?.title}</h4>
-        </div>
-);
+    switch (state.state) {
+        case 'loading':
+            return <div>Loading...</div>;
+        case 'error':
+            return <div>Error loading video. Please try again later.</div>;
+        default:
+            return (
+                <div>
+                    <video width="640" height="360" controls>
+                        <source src={state.video.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag
+                    </video>
+                    <h4>{state.video.title}</h4>
+                </div>
+            );
+    }
 };
 
 export default VideoPlayer;
