@@ -37,23 +37,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
 
     return (
         <div>
-<<<<<<< Updated upstream
-            <div>
-                <video width="640" height="360" controls>
-                    <source src={video.videoUrl} type="video/mp4"/>
-                    Your browser does not support the video tag
-                </video>
-            </div>
-            <div className="video-title">
-                <h4>{video.title}</h4>
-            </div>
-=======
             <video width="640" height="360" controls>
                 <source src={video?.videoUrl} type="video/mp4" />
                 Your browser does not support the video tag
             </video>
             <h4>{video?.title}</h4>
->>>>>>> Stashed changes
         </div>
 );
 };
