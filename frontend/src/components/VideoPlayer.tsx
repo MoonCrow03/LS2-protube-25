@@ -19,7 +19,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
         fetch(`http://localhost:8080/api/videos/${id}`)
             .then(response => response.json())
             .then(data => {
-                setState({ state: 'success', video: { title: data.title, videoUrl: data.videoUrl });
+                setState({ state: 'success', video: { title: data.title, videoUrl: data.videoUrl }});
             })
             .catch(error => {
                 console.error('Error fetching video:', error);
