@@ -4,6 +4,8 @@ import com.tecnocampus.LS2.protube_back.domain.Comment;
 import com.tecnocampus.LS2.protube_back.domain.Like;
 import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

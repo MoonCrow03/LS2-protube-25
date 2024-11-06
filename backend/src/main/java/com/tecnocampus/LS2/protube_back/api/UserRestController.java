@@ -5,6 +5,7 @@ import com.tecnocampus.LS2.protube_back.dto.UserDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class UserRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@RequestBody InputUserRecord inputUser){
+    public UserDTO createUser(@Valid @RequestBody InputUserRecord inputUser){
         return userService.createUser(inputUser);
     }
 

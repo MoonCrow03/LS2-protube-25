@@ -2,6 +2,9 @@ package com.tecnocampus.LS2.protube_back.domain;
 
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,11 +23,19 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Title cannot be null")
+    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
     private String title;
+
     @Column(length = 10000)
+    @Size(max = 10000, message = "Description cannot exceed 10000 characters")
     private String description;
+
     private String videoUrl;
     private String thumbnailUrl;
+
+    @NotNull(message = "Duration cannot be null")
+    @Min(value = 1, message = "Duration must be greater than 0")
     private Long duration;
 
     @OneToMany
