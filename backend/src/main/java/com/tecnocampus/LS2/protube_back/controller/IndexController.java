@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.controller;
 
+import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import com.tecnocampus.LS2.protube_back.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,12 +24,10 @@ public class IndexController {
             String auth0Id = principal.getAttribute("sub");  // Auth0 unique user ID
             String email = principal.getAttribute("email");
             String name = principal.getAttribute("name");
+            String picture = principal.getPicture();
 
-            // Save or update the user in your local database
-            userService.saveOrUpdateUser(auth0Id, email, name);
+            userService.createUser(new InputUserRecord(name,email,picture,auth0Id));
         }
-
-
         return "index";
     }
 

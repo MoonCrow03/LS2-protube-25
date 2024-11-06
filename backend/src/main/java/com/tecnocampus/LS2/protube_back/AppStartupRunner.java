@@ -114,10 +114,10 @@ public class AppStartupRunner implements ApplicationRunner {
 
     @Transactional
     public void addDefaultUsers() {
-        InputUserRecord inputUser = new InputUserRecord("protube-admin", "12345");
+        InputUserRecord inputUser = new InputUserRecord("protube-admin", "12345@gmail.com","a","a");
         userService.createUser(inputUser);
 
-        InputUserRecord inputUser2 = new InputUserRecord("protube-comment", "12345");
+        InputUserRecord inputUser2 = new InputUserRecord("protube-comment", "12345@gmail.com","a","a");
         userService.createUser(inputUser2);
     }
 

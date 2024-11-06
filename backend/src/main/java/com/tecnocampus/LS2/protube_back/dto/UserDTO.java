@@ -18,15 +18,19 @@ import java.util.List;
 @Setter
 public class UserDTO {
     private String username;
+    private String email;
+    private String picture;
     private List<VideoDTO> uploadedVideos = new ArrayList<>();
     private List<LikeDTO> likedVideos = new ArrayList<>();
     private String password;
 
     public UserDTO(User user){
         this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.picture = user.getPicture();
         this.uploadedVideos = user.getUploadedVideos().stream().map(VideoDTO::new).toList();
         this.likedVideos = user.getLikedVideos().stream().map(LikeDTO::new).toList();
-        this.password = user.getPassword();
+
     }
 
     public UserDTO(String username, String password) {
