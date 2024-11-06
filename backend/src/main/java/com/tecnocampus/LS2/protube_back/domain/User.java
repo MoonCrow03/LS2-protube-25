@@ -43,7 +43,7 @@ public class User {
         this.username = inputUserRecord.username();
         this.email = inputUserRecord.email();
         this.picture = inputUserRecord.picture();
-        this.auth0Id = inputUserRecord.authId();
+        this.auth0Id = inputUserRecord.auth0Id();
 
         this.uploadedVideos = new ArrayList<>();
         this.likedVideos = new ArrayList<>();
