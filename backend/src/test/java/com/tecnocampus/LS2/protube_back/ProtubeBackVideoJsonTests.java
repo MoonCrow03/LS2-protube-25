@@ -1,19 +1,17 @@
 package com.tecnocampus.LS2.protube_back;
 
 import com.tecnocampus.LS2.protube_back.domain.User;
-import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
+import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
+import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -29,13 +27,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ProtubeBackVideoJsonTests {
 
-	static private String username;
-	static private String password;
+	static private String username, email, picture, authId, title, description;
+	static private Long duration;
+
 	static private String inputUserJson;
-	static private String endpointURL;
+	static private String inputVideoJson;
+	static private String userEndpointURL;
 
 	@Autowired
 	private UserRepository	userRepository;
+
+	@Autowired
+	VideoRepository videoRepository;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -48,15 +51,43 @@ class ProtubeBackVideoJsonTests {
 	@BeforeAll
 	static void setUp() throws Exception {
 		username = "User1";
-		password = "123";
-		inputUserJson = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
-		endpointURL = "/api/users/" + username;
+		email = "123@gmail.com";
+		picture = "123";
+		authId = "123";
+		title = "my first video";
+		description = "my description";
+		duration = 50L;
+		inputUserJson = String.format("{\"username\":\"%s\",\"email\":\"%s\",\"picture\":\"%s\",\"authId\":\"%s\"}", username, email, picture, authId);
+		inputVideoJson = String.format("{\"title\":\"%s\",\"description\":\"%s\",\"duration\":%s,\"username\":\"%s\"}", title, description, duration, username);
+		userEndpointURL = "/api/users/" + username;
 	}
 
 	//VIDEO TESTS
 	@Test
-	void createVideoTest(){
+	void createVideoTest() throws Exception {
+		mockMvc.perform(post("/api/users")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(inputUserJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.username").value(username))
+				.andExpect(jsonPath("$.email").value(email))
+				.andExpect(jsonPath("$.picture").value(picture))
+				.andExpect(jsonPath("$.authId").value(authId));
 
+		mockMvc.perform(post("/api/videos")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(inputVideoJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.title").value(title))
+				.andExpect(jsonPath("$.description").value(description))
+				.andExpect(jsonPath("$.duration").value(duration))
+				.andExpect(jsonPath("$.username").value(username));
+
+		Video video = videoRepository.findByTitle(title).orElse(null);
+		assert video != null;
+		assert video.getTitle().equals(title);
+		assert video.getDescription().equals(description);
+		assert video.getDuration().equals(duration);
 	}
 
 
@@ -65,46 +96,50 @@ class ProtubeBackVideoJsonTests {
 	@Test
 	void createUserTest() throws Exception {
 		mockMvc.perform(post("/api/users")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(inputUserJson))
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(inputUserJson))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.username").value(username))
-				.andExpect(jsonPath("$.password").value(password));
+				.andExpect(jsonPath("$.email").value(email))
+				.andExpect(jsonPath("$.picture").value(picture))
+				.andExpect(jsonPath("$.authId").value(authId));
 
 		User createdUser = userRepository.findByUsername(username).orElse(null);
 		assert createdUser != null : "User should be found in the database";
 		assert createdUser.getUsername().equals(username) : "user username not matching";
-		assert createdUser.getPassword().equals(password) : "user password not matching";
+		assert createdUser.getEmail().equals(email) : "user password not matching";
+		assert createdUser.getPicture().equals(picture);
+		assert createdUser.getAuth0Id().equals(authId);
 	}
 
 
 	@Test
 	void getUserTest() throws Exception {
-		userRepository.save(new User(username, password));
+		userRepository.save(new User(username, email, authId, picture));
 
-		mockMvc.perform(get(endpointURL)
+		mockMvc.perform(get(userEndpointURL)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isFound())
 				.andExpect(jsonPath("$.username").value(username))
-				.andExpect(jsonPath("$.password").value(password));
+				.andExpect(jsonPath("$.email").value(picture));
 	}
 
 	@Test
 	@Transactional
 	void deleteUserTest() throws Exception {
-		userRepository.save(new User(username, password));
+		userRepository.save(new User(username, email, authId, picture));
 
-		mockMvc.perform(get(endpointURL)
+		mockMvc.perform(get(userEndpointURL)
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isFound())
 				.andExpect(jsonPath("$.username").value(username))
-				.andExpect(jsonPath("$.password").value(password));
+				.andExpect(jsonPath("$.email").value(picture));
 
-		mockMvc.perform(delete(endpointURL)
+		mockMvc.perform(delete(userEndpointURL)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
-		mockMvc.perform(get(endpointURL)
+		mockMvc.perform(get(userEndpointURL)
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
 

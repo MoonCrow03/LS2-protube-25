@@ -49,8 +49,11 @@ public class User {
         this.likedVideos = new ArrayList<>();
     }
 
-    public User(String username){
+    public User(String username, String email, String auth0Id, String picture) {
         this.username = username;
+        this.email = email;
+        this.auth0Id = auth0Id;
+        this.picture = picture;
 
 
         this.uploadedVideos = new ArrayList<>();
