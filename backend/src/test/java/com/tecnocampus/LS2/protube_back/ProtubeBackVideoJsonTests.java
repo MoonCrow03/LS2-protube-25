@@ -53,6 +53,14 @@ class ProtubeBackVideoJsonTests {
 		endpointURL = "/api/users/" + username;
 	}
 
+	//VIDEO TESTS
+	@Test
+	void createVideoTest(){
+
+	}
+
+
+
 	//USER TESTS
 	@Test
 	void createUserTest() throws Exception {
@@ -101,4 +109,7 @@ class ProtubeBackVideoJsonTests {
 				.andExpect(status().isNotFound());
 
 	}
+
+
+
 }

@@ -34,8 +34,6 @@ public class VideoRestController {
         return videoServices.getVideo(videoTitle);
     }
 
-
-
     @GetMapping("/{videoId}")
     @ResponseStatus(HttpStatus.FOUND)
     public BasicVideoDTO getVideo(@PathVariable Long videoId) {

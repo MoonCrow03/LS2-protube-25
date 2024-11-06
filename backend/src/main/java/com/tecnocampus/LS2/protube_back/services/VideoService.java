@@ -6,6 +6,9 @@ import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.exceptions.UserNotFoundException;
+import com.tecnocampus.LS2.protube_back.exceptions.VideoBadPostRequest;
+import com.tecnocampus.LS2.protube_back.exceptions.VideoNotFoundException;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
 import jakarta.annotation.PostConstruct;
@@ -31,7 +34,7 @@ public class VideoService {
 
     @Transactional
     public VideoDTO createVideo(InputVideoRecord inputVideo) {
-        User user = userRepository.findByUsername(inputVideo.username()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUsername(inputVideo.username()).orElseThrow(() -> new VideoBadPostRequest(inputVideo.username()));
         Video video = new Video(inputVideo, user);
         user.addVideo(video);
 
@@ -41,12 +44,12 @@ public class VideoService {
     }
 
     public VideoDTO getVideo(String videoTile) {
-        Video video = videoRepository.findByTitle(videoTile).orElseThrow(() -> new RuntimeException("Video not found"));
+        Video video = videoRepository.findByTitle(videoTile).orElseThrow(() -> new VideoNotFoundException(videoTile));
         return new VideoDTO(video);
     }
 
     public BasicVideoDTO getVideoById(Long videoId) {
-        Video video = videoRepository.findById(videoId).orElseThrow(() -> new RuntimeException("Video not found"));
+        Video video = videoRepository.findById(videoId).orElseThrow(() -> new VideoNotFoundException(videoId));
         return new BasicVideoDTO(video);
     }
 
