@@ -24,7 +24,7 @@ public class Video {
     private Long id;
 
     @NotNull(message = "Title cannot be null")
-    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
+    @Size(min = 3, max = 10000, message = "Title must be between 3 and 100 characters")
     private String title;
 
     @Column(length = 10000)
