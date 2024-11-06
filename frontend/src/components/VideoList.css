@@ -23,3 +23,9 @@
     font-size: 16px; /* Tamaño del texto del título */
     font-weight: bold; /* Texto en negrita */
 }
+
+.video-user {
+    padding: 8px; /* Espacio alrededor del título */
+    font-size: 16px; /* Tamaño del texto del título */
+    font-weight: bold; /* Texto en negrita */
+}

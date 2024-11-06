@@ -11,6 +11,7 @@ import lombok.Setter;
 public class BasicVideoDTO {
     private Long id;
     private String title;
+    private String user;
     private String description;
     private String videoUrl;
     private String thumbnailUrl;
@@ -19,6 +20,7 @@ public class BasicVideoDTO {
     public BasicVideoDTO(Video video) {
         this.id = video.getId();
         this.title = video.getTitle();
+        this.user = video.getUser().getUsername();
         this.description = video.getDescription();
         this.videoUrl = video.getVideoUrl();
         this.thumbnailUrl = video.getThumbnailUrl();

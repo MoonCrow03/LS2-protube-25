@@ -5,6 +5,7 @@ import './VideoList.css';
 interface Video {
     id: number;
     title: string;
+    user: string;
     description: string;
     videoUrl: string;
     thumbnailUrl: string;
@@ -34,6 +35,7 @@ const VideoList: React.FC = () => {
                                 alt={video.title}
                             />
                             <h3 className="video-title">{video.title}</h3> {/* Aplica la clase CSS al título */}
+                            <h4 className="video-user">{video.user}</h4> {/* Aplica la clase CSS al título */}
                         </Link>
                     </div>
                 ))}
