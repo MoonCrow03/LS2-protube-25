@@ -5,6 +5,7 @@ import './VideoList.css';
 interface Video {
     id: number;
     title: string;
+    user: string;
     description: string;
     videoUrl: string;
     thumbnailUrl: string;
@@ -13,6 +14,7 @@ interface Video {
 
 const VideoList: React.FC = () => {
     const [videos, setVideos] = useState<Video[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         fetch('http://localhost:8080/api/videos/list')
@@ -23,7 +25,14 @@ const VideoList: React.FC = () => {
 
     return (
         <div>
-            <h1>Lista de Videos</h1>
+            {/* buscador */}
+            <input
+                type="text"
+                className="search-bar"
+                placeholder="Search videos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <div className="video-list"> {/* Aplica la clase CSS para el contenedor de la cuadrícula */}
                 {videos.map(video => (
                     <div className="video-item" key={video.id}> {/* Aplica la clase CSS para cada video */}
@@ -34,6 +43,7 @@ const VideoList: React.FC = () => {
                                 alt={video.title}
                             />
                             <h3 className="video-title">{video.title}</h3> {/* Aplica la clase CSS al título */}
+                            <h4 className="video-user">{video.user}</h4> {/* Aplica la clase CSS al título */}
                         </Link>
                     </div>
                 ))}

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './video-title.css';
-
 
 interface VideoPlayerProps {
     url?: string;
@@ -19,7 +17,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
         fetch(`http://localhost:8080/api/videos/${id}`)
             .then(response => response.json())
             .then(data => {
-                setState({ state: 'success', video: { title: data.title, videoUrl: data.videoUrl });
+                setState({ state: 'success', video: { title: data.title, videoUrl: data.videoUrl }})
             })
             .catch(error => {
                 console.error('Error fetching video:', error);
@@ -35,7 +33,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
         default:
             return (
                 <div>
-                    <video width="640" height="360" controls>
+                    <video data-testid="video-player" width="640" height="360" controls>
                         <source src={state.video.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag
                     </video>

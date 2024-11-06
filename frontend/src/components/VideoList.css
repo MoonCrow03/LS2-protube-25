@@ -6,20 +6,64 @@
 }
 
 .video-item {
-    border: 1px solid #ccc; /* Borde alrededor de cada video */
-    border-radius: 8px; /* Bordes redondeados */
-    overflow: hidden; /* Asegura que no se desborde el contenido */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar un efecto de profundidad */
-    text-align: center; /* Centra el texto dentro de cada video */
+    border-radius: 12px; /* Más redondeado */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición para la animación */
+    background-color: #fff; /* Fondo blanco para contraste */
+    cursor: pointer; /* Cambia el cursor al pasar */
+}
+
+.video-item:hover {
+    transform: scale(1.05); /* Escala hacia arriba cuando hace hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa cuando hace hover */
 }
 
 .video-thumbnail {
-    width: 100%; /* Asegura que la miniatura ocupe todo el ancho */
-    height: auto; /* Mantiene la proporción de la imagen */
+    width: 100%; /* Asegura que la miniatura ocupe todo el ancho disponible */
+    height: 200px; /* Establece una altura fija para todas las miniaturas */
+    object-fit: cover; /* Asegura que la imagen llene el contenedor sin distorsionarse, pero recortando si es necesario */
+    transition: opacity 0.3s ease;
+}
+
+.video-item:hover .video-thumbnail {
+    opacity: 0.9; /* Ligera opacidad cuando hace hover */
 }
 
 .video-title {
-    padding: 8px; /* Espacio alrededor del título */
-    font-size: 16px; /* Tamaño del texto del título */
-    font-weight: bold; /* Texto en negrita */
+    padding: 12px 8px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333; /* Color oscuro para contraste */
+    transition: color 0.3s ease; /* Cambia de color en hover */
+}
+
+.video-user {
+    padding: 8px;
+    font-size: 14px;
+    color: #666; /* Color más claro */
+    font-style: italic; /* Da un estilo distinto al usuario */
+}
+
+.video-item:hover .video-title {
+    color: #d63a18; /* Color vibrante al pasar */
+}
+
+.search-bar {
+    width: 100%; /* Ancho completo */
+    max-width: 500px; /* Máximo 500px */
+    padding: 12px 20px; /* Espacio interno */
+    margin: 20px auto; /* Centrado vertical */
+    display: block; /* Ocupa toda la línea */
+    font-size: 1em; /* Tamaño de fuente */
+    border: 2px solid #ccc; /* Borde gris claro */
+    border-radius: 25px; /* Esquinas redondeadas */
+    outline: none; /* Sin contorno */
+    transition: all 0.3s ease; /* Transición suave */
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.search-bar:focus {
+    border-color: #d63a18; /* Borde rojo al enfocar */
+    box-shadow: 0px 4px 12px rgba(208, 35, 3, 0.4); /* Sombra más fuerte */
 }

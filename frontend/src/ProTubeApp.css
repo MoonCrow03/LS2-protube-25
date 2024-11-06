@@ -1,0 +1,8 @@
+.app-title {
+    color: #FF5733; /* Color */
+    font-family: 'Roboto', sans-serif; /* Font */
+    font-size: 50px; /* Tamaño de la letra */
+    font-weight: bold;
+    text-align: center;
+    margin: 30px 0;
+}
