@@ -15,13 +15,36 @@ interface Video {
 const VideoList: React.FC = () => {
     const [videos, setVideos] = useState<Video[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/videos/list')
-            .then(response => response.json())
-            .then((data: Video[]) => setVideos(data))
-            .catch(error => console.error('Error fetching videos:', error));
-    }, []);
+        // Function to fetch videos based on the search term
+        const fetchVideos = async () => {
+            try {
+                const url = searchTerm
+                    ? `http://localhost:8080/api/videos/search/${searchTerm}`
+                    : 'http://localhost:8080/api/videos/list';
+                const response = await fetch(url);
+                const data: Video[] = await response.json();
+                setVideos(data);
+            } catch (error) {
+                console.error('Error fetching videos:', error);
+            }
+        };
+
+        // Debounce for search input to avoid too many requests
+        const debounceFetch = setTimeout(fetchVideos, 300);
+
+        // Cleanup debounce timeout
+        return () => clearTimeout(debounceFetch);
+
+    }, [searchTerm]); // Trigger useEffect whenever searchTerm changes
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            setSearchTerm(inputValue); // Set search term on Enter
+        }
+    };
 
     return (
         <div>
@@ -30,8 +53,9 @@ const VideoList: React.FC = () => {
                 type="text"
                 className="search-bar"
                 placeholder="Search videos..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
             />
             <div className="video-list"> {/* Aplica la clase CSS para el contenedor de la cuadrícula */}
                 {videos.map(video => (

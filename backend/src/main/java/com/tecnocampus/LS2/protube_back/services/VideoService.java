@@ -53,6 +53,14 @@ public class VideoService {
         return new BasicVideoDTO(video);
     }
 
+    public List<BasicVideoDTO> getVideoListByString(String input) {
+        List<Video> videos = videoRepository.findByTitleContaining(input);
+
+        return videos.stream()
+                .map(BasicVideoDTO::new)
+                .collect(Collectors.toList());
+    }
+
     public List<BasicVideoDTO> getAllVideos() {
         List<Video> videos = videoRepository.findAll();
 
