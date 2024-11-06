@@ -2,6 +2,7 @@ package com.tecnocampus.LS2.protube_back.domain;
 
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,9 +26,12 @@ public class User {
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
 
-    @NotNull(message = "password cannot be null")
-    @Size(min = 3, message = "password must be at least 3 characters")
-    private String password;
+    @Email
+    private String email;
+
+    private String auth0Id;
+
+    private String picture;
 
     @OneToMany
     private List<Video> uploadedVideos;
@@ -37,15 +41,17 @@ public class User {
 
     public User(InputUserRecord inputUserRecord) {
         this.username = inputUserRecord.username();
-        this.password = inputUserRecord.password();
+        this.email = inputUserRecord.email();
+        this.picture = inputUserRecord.picture();
+        this.auth0Id = inputUserRecord.authId();
 
         this.uploadedVideos = new ArrayList<>();
         this.likedVideos = new ArrayList<>();
     }
 
-    public User(String username, String password){
+    public User(String username){
         this.username = username;
-        this.password = password;
+
 
         this.uploadedVideos = new ArrayList<>();
         this.likedVideos = new ArrayList<>();
