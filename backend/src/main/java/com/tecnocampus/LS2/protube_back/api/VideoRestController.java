@@ -35,6 +35,12 @@ public class VideoRestController {
         return videoServices.getVideo(videoTitle);
     }
 
+    @GetMapping("/search/{input}")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<BasicVideoDTO> getVideoListByString(@PathVariable String input) {
+        return videoServices.getVideoListByString(input);
+    }
+
     @GetMapping("/{videoId}")
     @ResponseStatus(HttpStatus.FOUND)
     public BasicVideoDTO getVideo(@PathVariable Long videoId) {
