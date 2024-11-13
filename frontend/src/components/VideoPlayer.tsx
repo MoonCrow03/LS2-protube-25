@@ -83,7 +83,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
         default:
             return (
                 <div className="video-container">
-                    <video className="video-player" controls>
+                    <video className="video-player" controls data-testid="video-player">
                         <source src={state.video.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
