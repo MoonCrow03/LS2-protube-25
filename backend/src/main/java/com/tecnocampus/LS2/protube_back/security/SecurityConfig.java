@@ -11,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -47,11 +49,12 @@ public class SecurityConfig {
         return (request, response, authentication) -> {
             try {
                 //String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-                String baseUrl = "localhost:8080";
-                response.sendRedirect(issuer + "v2/logout?client_id=" + clientId + "&returnTo=" + baseUrl);
+                String encodedBaseUrl = URLEncoder.encode("https://localhost:5173", StandardCharsets.UTF_8);
+                response.sendRedirect(issuer + "v2/logout?client_id=" + clientId);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         };
     }
+
 }
