@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './VideoPlayer.css';
+import Comments from './Comments';
 
 interface VideoPlayerProps {
     url?: string;
@@ -12,18 +13,9 @@ type VideoStateType =
     | { state: 'error', message: string }
     | { state: 'success', video: { title: string; videoUrl: string; description: string } };
 
-type CommentType = {
-    id: number;
-    user: string;
-    content: string;
-    timestamp: string;
-};
-
 const VideoPlayer: React.FC<VideoPlayerProps> = () => {
     const { id } = useParams<{ id: string }>();
     const [state, setState] = useState<VideoStateType>({ state: 'loading' });
-    const [comments, setComments] = useState<CommentType[]>([]);
-    const [newComment, setNewComment] = useState<string>('');
 
     useEffect(() => {
         setState({ state: 'loading' });
@@ -37,43 +29,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
             })
             .catch(error => {
                 console.error('Error fetching video:', error);
-                setState({ state: 'error', message: error });
+                setState({ state: 'error', message: error.message });
             });
     }, [id]);
-
-    useEffect(() => {
-        fetch(`http://localhost:8080/api/videos/${id}/comments`)
-            .then(response => response.json())
-            .then(data => setComments(data))
-            .catch(error => console.error('Error fetching comments:', error));
-    }, [id]);
-
-    const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setNewComment(e.target.value);
-    };
-
-    const handleCommentSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (newComment.trim()) {
-            const commentData = {
-                content: newComment,
-                videoId: id,
-            };
-            fetch(`http://localhost:8080/api/videos/${id}/comments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(commentData),
-            })
-                .then(response => response.json())
-                .then((comment: CommentType) => {
-                    setComments(prevComments => [comment, ...prevComments]);
-                    setNewComment('');
-                })
-                .catch(error => console.error('Error posting comment:', error));
-        }
-    };
 
     switch (state.state) {
         case 'loading':
@@ -91,33 +49,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
                     <div className="video-description">
                         <p>{state.video.description}</p>
                     </div>
-                    <h4 className="comment-title"> Comments </h4>
-                    <div className="comments-container">
-                        <form onSubmit={handleCommentSubmit} className="comment-form">
-                            <textarea
-                                value={newComment}
-                                onChange={handleCommentChange}
-                                placeholder="Add a comment..."
-                                className="comment-input"
-                            />
-                            <button type="submit" className="submit-comment">
-                                Submit Comment
-                            </button>
-                        </form>
-                        <div className="comments-list">
-                            {comments.length > 0 ? (
-                                comments.map((comment) => (
-                                    <div key={comment.id} className="comment">
-                                        <strong>{comment.user}</strong>
-                                        <p>{comment.content}</p>
-                                        <span>{new Date(comment.timestamp).toLocaleString()}</span>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No comments yet. Be the first to comment!</p>
-                            )}
-                        </div>
-                    </div>
+                    <h4 className="comment-title">Comments</h4>
+                    <Comments videoId={id ?? ''} />
                 </div>
             );
     }
