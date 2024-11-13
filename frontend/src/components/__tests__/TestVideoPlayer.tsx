@@ -13,10 +13,12 @@ describe('VideoPlayer Component', () => {
     const mockVideoData = {
         title: 'Bruno Mars - 24K Magic (Official Music Video)',
         videoUrl: 'http://localhost:8080/api/videos/0',
+        description: 'The official music video for Bruno Mars\' "24K Magic".'
     };
 
     beforeEach(() => {
         fetchMock.resetMocks();
+        fetchMock.enableMocks();
     })
 
     it('displays loading state initially', () => {
@@ -25,18 +27,19 @@ describe('VideoPlayer Component', () => {
     });
 
     it('displays a video player and title when data is successfully fetched', async () => {
-        fetchMock.mockResponseOnce(JSON.stringify(mockVideoData));
+        fetchMock.mockIf(/api\/videos\/0/, async () => Promise.resolve({body: JSON.stringify(mockVideoData)}));
 
         renderWithRouter(<VideoPlayer />);
 
         await waitFor(() => {
             // Check if the video element is rendered with the correct src
             const videoElement = screen.getByTestId('video-player');
-            expect(videoElement.querySelector('source')).toHaveAttribute('src', mockVideoData.videoUrl);
-
-            // Check if the title element is rendered with the correct text
-            expect(screen.getByText(mockVideoData.title)).toBeInTheDocument();
+            expect(videoElement).toBeInTheDocument();
         });
+
+        expect( screen.getByTestId('video-player').querySelector('source')).toHaveAttribute('src', mockVideoData.videoUrl);
+        // Check if the title element is rendered with the correct text
+        expect(screen.getByText(mockVideoData.title)).toBeInTheDocument();
     });
 
 
