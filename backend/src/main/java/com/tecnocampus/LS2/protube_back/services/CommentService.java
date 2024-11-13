@@ -27,12 +27,11 @@ public class CommentService {
     @Autowired
     VideoRepository videoRepository;
 
-
     @Transactional
-    public CommentDTO createComment(InputCommentRecord inputCommenet){
-        User user = userRepository.findByUsername(inputCommenet.username()).orElseThrow();
-        Video video = videoRepository.findById(inputCommenet.videoId()).orElseThrow();
-        Comment comment = new Comment(user, video, inputCommenet.content());
+    public CommentDTO createComment(InputCommentRecord inputComment){
+        User user = userRepository.findByUsername(inputComment.username()).orElseThrow();
+        Video video = videoRepository.findById(inputComment.videoId()).orElseThrow();
+        Comment comment = new Comment(user, video, inputComment.content());
         video.addComment(comment);
         commentRepository.save(comment);
         videoRepository.save(video);
