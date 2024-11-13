@@ -10,6 +10,7 @@ const ProTubeApp: React.FC = () => {
     return (
         <Router>
             <div className="App">
+                <button className="login-button">Login</button>
                 <h1 className="app-title">. . . . . ╰──╮ PRO ▷ TUBE ╭──╯ . . . . .</h1>
                 <h1 className="app-title">────────────────────────────────────────</h1>
                 <Routes>
