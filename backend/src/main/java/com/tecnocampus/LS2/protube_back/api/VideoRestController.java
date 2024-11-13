@@ -60,7 +60,7 @@ public class VideoRestController {
     }
 
     //COMMENTS
-    @GetMapping("/comments/{videoId}")
+    @GetMapping("/{videoId}/comments")
     @ResponseStatus(HttpStatus.FOUND)
     public List<CommentDTO> getVideoComments(@PathVariable Long videoId) {
         return commentService.getCommentsFromVideo(videoId);

@@ -14,7 +14,7 @@ type VideoStateType =
 
 type CommentType = {
     id: number;
-    user: { name: string };
+    user: string;
     content: string;
     timestamp: string;
 };
@@ -108,7 +108,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
                             {comments.length > 0 ? (
                                 comments.map((comment) => (
                                     <div key={comment.id} className="comment">
-                                        <strong>{comment.user.name}</strong>
+                                        <strong>{comment.user}</strong>
                                         <p>{comment.content}</p>
                                         <span>{new Date(comment.timestamp).toLocaleString()}</span>
                                     </div>
