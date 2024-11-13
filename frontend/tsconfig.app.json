@@ -25,7 +25,8 @@
       "node",
       "jest",
       "@testing-library/jest-dom"
-    ]
+    ],
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src"
