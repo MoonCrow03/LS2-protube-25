@@ -27,7 +27,9 @@ public class IndexController {
             String picture = principal.getPicture();
 
             userService.createUser(new InputUserRecord(name,email,picture,auth0Id));
+            return "redirect:http://localhost:5173";
         }
+
         return "index";
     }
 
