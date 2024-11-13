@@ -40,3 +40,16 @@
 .login-button:active {
     transform: scale(0.95);
 }
+
+
+.login-button.profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.login-button.profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
