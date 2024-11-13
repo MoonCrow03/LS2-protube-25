@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import CommentForm from './CommentForm';
+import CommentList from './CommentList';
 
 interface Comment {
     id: number;
-    user: {
-        username: string;
-    };
+    user: string;
     content: string;
+    timestamp: string;
 }
 
 interface CommentsProps {
-    videoId: number;
+    videoId: string;
 }
 
 const Comments: React.FC<CommentsProps> = ({ videoId }) => {
     const [comments, setComments] = useState<Comment[]>([]);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/videos/comments/${videoId}`)
+        fetch(`http://localhost:8080/api/videos/${videoId}/comments`)
             .then(response => response.json())
-            .then((data: Comment[]) => setComments(data))
+            .then(data => setComments(data))
             .catch(error => console.error('Error fetching comments:', error));
     }, [videoId]);
 
+    const handleNewComment = (newComment: Comment) => {
+        setComments(prevComments => [newComment, ...prevComments]);
+    };
+
     return (
-        <div>
-            <h3>Comentarios</h3>
-            <ul>
-                {comments.map(comment => (
-                    <li key={comment.id}>
-                        <strong>{comment.user.username}:</strong> {comment.content}
-                    </li>
-                ))}
-            </ul>
+        <div className="comments-container">
+            <CommentForm videoId={videoId} onCommentPosted={handleNewComment} />
+            <CommentList comments={comments} />
         </div>
     );
 };
 
 export default Comments;
+
 

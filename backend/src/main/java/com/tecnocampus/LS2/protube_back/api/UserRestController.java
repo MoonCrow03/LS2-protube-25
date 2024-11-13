@@ -40,7 +40,7 @@ public class UserRestController {
     }
 
     //COMMENTS
-    @GetMapping("/comments/{username}")
+    @GetMapping("/{username}/comments")
     @ResponseStatus(HttpStatus.FOUND)
     public List<CommentDTO> getUserComments(@PathVariable String username){
         return commentService.getCommentsFromUser(username);
