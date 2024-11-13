@@ -23,7 +23,7 @@ public class IndexController {
 
             String auth0Id = principal.getAttribute("sub");  // Auth0 unique user ID
             String email = principal.getAttribute("email");
-            String name = principal.getAttribute("name");
+            String name = principal.getUserInfo().getNickName();
             String picture = principal.getPicture();
 
             userService.createUser(new InputUserRecord(name,email,picture,auth0Id));
