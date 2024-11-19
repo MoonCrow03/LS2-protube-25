@@ -28,6 +28,8 @@ public class DevSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
                 )
+                .logout(logout -> logout
+                        .addLogoutHandler(logoutHandler()))
                 .csrf(AbstractHttpConfigurer::disable) // Completely disable CSRF protection for easier development
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)); // Allow frames from the same origin (required for H2 console)
@@ -38,7 +40,7 @@ public class DevSecurityConfig {
     private LogoutHandler logoutHandler() {
         return (request, response, authentication) -> {
             try {
-                String baseUrl = "localhost:8080";
+                String baseUrl = "http%3A%2F%2Flocalhost:5173/";
                 response.sendRedirect(issuer + "v2/logout?client_id=" + clientId + "&returnTo=" + baseUrl);
             } catch (IOException e) {
                 throw new RuntimeException(e);
