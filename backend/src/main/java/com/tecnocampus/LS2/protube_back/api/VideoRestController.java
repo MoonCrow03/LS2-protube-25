@@ -3,6 +3,7 @@ package com.tecnocampus.LS2.protube_back.api;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
+import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
@@ -60,7 +61,13 @@ public class VideoRestController {
     }
 
     //COMMENTS
-    @GetMapping("/comments/{videoId}")
+    @PostMapping("/{videoId}/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDTO createComment(@Valid @RequestBody InputCommentRecord inputComment) {
+        return commentService.createComment(inputComment);
+    }
+
+    @GetMapping("/{videoId}/comments")
     @ResponseStatus(HttpStatus.FOUND)
     public List<CommentDTO> getVideoComments(@PathVariable Long videoId) {
         return commentService.getCommentsFromVideo(videoId);

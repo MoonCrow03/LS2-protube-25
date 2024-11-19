@@ -14,17 +14,15 @@ import java.time.LocalDateTime;
 @Setter
 public class CommentDTO {
     private Long id;
-    private UserDTO user;
-    private VideoDTO video;
+    private String user;
     private String content;
-    private LocalDateTime timestamp;
+    private String timestamp;
 
     public CommentDTO(Comment comment){
         this.id = comment.getId();
-        this.user = new UserDTO(comment.getUser());
-        this.video = new VideoDTO(comment.getVideo());
+        this.user = comment.getUser().getUsername();
         this.content = comment.getContent();
-        this.timestamp = comment.getTimestamp();
+        this.timestamp = comment.getTimestamp().toString();
     }
 
 }
