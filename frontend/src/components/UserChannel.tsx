@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Tabs from './Tabs';
 import "./User-Channel.css";
+import Tabs from "./ChannelTabs.tsx";
 
 interface UserChannelProps {
     username: string;
@@ -12,7 +12,7 @@ interface UserChannelProps {
 const UserChannel: React.FC<UserChannelProps> = ({ username, email, picture, auth0Id }) => {
     const [activeTab, setActiveTab] = useState('Videos');
     const [videos, setVideos] = useState<{ title: string; videoUrl: string; description: string }[]>([]);
-    const [comments, setComments] = useState<string[]>([]); // Add a state for comments
+    const [comments, setComments] = useState<string[]>([]);
 
     useEffect(() => {
         if (activeTab === 'Videos') {
@@ -33,26 +33,6 @@ const UserChannel: React.FC<UserChannelProps> = ({ username, email, picture, aut
             <img src={picture} alt={username} />
             <h1>{username}</h1>
             <Tabs onTabChange={setActiveTab} activeTab={activeTab} />
-            <div className="tab-content">
-                {activeTab === 'Videos' && (
-                    <div>
-                        {videos.map((video, index) => (
-                            <div key={index}>
-                                <h2>{video.title}</h2>
-                                <video src={video.videoUrl} controls />
-                                <p>{video.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {activeTab === 'Comments' && (
-                    <div>
-                        {comments.map((comment, index) => (
-                            <p key={index}>{comment}</p>
-                        ))}
-                    </div>
-                )}
-            </div>
         </div>
     );
 };
