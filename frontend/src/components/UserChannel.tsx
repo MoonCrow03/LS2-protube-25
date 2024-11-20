@@ -6,13 +6,6 @@ interface UsernameProps {
     username: string;
 }
 
-interface User {
-    username: string;
-    email: string;
-    picture: string;
-    auth0Id: string;
-}
-
 type ChannelStateType =
     | { state: 'loading' }
     | { state: 'error', message: string }
@@ -32,13 +25,6 @@ const UserChannel: React.FC<UsernameProps> = ({ username }) => {
                 return response.json();
             })
             .then((data) => {
-                const user: User = {
-                    username: data.username,
-                    email: data.email,
-                    picture: data.picture,
-                    auth0Id: data.auth0Id
-                };
-                localStorage.setItem('user', JSON.stringify(user));
                 setState({
                     state: 'success',
                     user: { username: data.username, email: data.email, picture: data.picture, auth0Id: data.auth0Id }
