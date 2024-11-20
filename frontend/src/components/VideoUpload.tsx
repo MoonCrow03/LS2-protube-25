@@ -5,6 +5,7 @@ import "./VideoUpload.css";
 const VideoUpload: React.FC = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [duration, setDuration] = useState<number | null>(null);
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const navigate = useNavigate();
@@ -20,8 +21,16 @@ const VideoUpload: React.FC = () => {
             setThumbnailFile(e.target.files[0]);
         }
     };
+    const getVideoDuration = (file: File) => {
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.onloadedmetadata = () => {
+            setDuration(video.duration); // Set the duration of the video
+        };
+    };
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title || !description || !videoFile || !thumbnailFile) {
             alert("Please fill in all fields and upload both files.");
@@ -32,12 +41,35 @@ const VideoUpload: React.FC = () => {
         formData.append("description", description);
         formData.append("video", videoFile);
         formData.append("thumbnail", thumbnailFile);
+        formData.append("user", "123")
+        formData.append("duration", duration)
+
+        //TODO:user
+        try {
+            // Assuming your backend is running at this URL:
+            const response = await fetch('/api/videos/upload', {
+                method: 'POST',
+                body: formData,
+            } as RequestInit);
+
+            if (response.ok) {
+                alert("Video uploaded successfully!");
+                navigate("/");  // Redirect to the home page after successful upload
+            } else {
+                alert("Failed to upload video.");
+            }
+        } catch (error) {
+            console.error("Error uploading video:", error);
+            alert("Error uploading video. Please try again.");
+        }
+
 
         // Simulate upload logic
         console.log("Form data submitted:");
         for (const [key, value] of formData.entries()) {
             console.log(key, value);
         }
+
 
         alert("Video uploaded successfully!");
 
