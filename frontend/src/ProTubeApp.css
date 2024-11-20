@@ -53,3 +53,33 @@
     border-radius: 50%;
     margin-right: 8px;
 }
+
+.upload-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #1e90ff, #00bfff);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    position: fixed; /* Fixed position for better accessibility */
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+/* Hover Effects */
+.upload-button:hover {
+    background: linear-gradient(135deg, #00bfff, #1e90ff);
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* Active State */
+.upload-button:active {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #1c86ee, #008bce);
+}
