@@ -45,8 +45,20 @@
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
-/* Login Button */
-.login-button {
+.login-container {
+    padding: 10px 20px;
+    margin: 10px 10px;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+}
+
+.user-logout{
+    display: flex;
+    gap: 10px;
+}
+
+.login-button, .logout-button {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -69,13 +81,36 @@
     transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
 
-.login-button:hover {
+.profile-button{
+    position: absolute;
+    top: 5px;
+    right: 130px;
+    margin: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ff5733, #ff3300); /* Match gradient with Upload */
+    color: white;
+    border-radius: 10px;
+    display: block;
+    border: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    box-shadow: 0px 0px 14px -7px #FF5733;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.login-button:hover, .logout-button:hover, .profile-button:hover {
     background: linear-gradient(135deg, #ff3300, #ff5733); /* Hover matches Upload's style */
     transform: scale(1.1);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
-.login-button:active {
+.login-button:active, .logout-button:active, .profile-button:active {
     transform: scale(0.95);
 }
 
