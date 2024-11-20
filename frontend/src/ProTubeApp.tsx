@@ -3,8 +3,11 @@ import VideoList from './components/VideoList';
 import VideoPlayer from './components/VideoPlayer';
 import UserChannel from './components/UserChannel';
 import LoginButton from "./components/LoginButton.tsx";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import './ProTubeApp.css';
+import VideoUpload from "./components/VideoUpload.tsx";
+import UploadButton from "./components/UploadButton.tsx";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+
 
 const ProTubeApp: React.FC = () => {
     return (
@@ -12,17 +15,32 @@ const ProTubeApp: React.FC = () => {
             <div className="App">
                 <NavigateToUserChannelButton />
                 <LoginButton />
-                <h1 className="app-title">. . . . . ╰──╮ PRO ▷ TUBE ╭──╯ . . . . .</h1>
+                <div className="title-container">
+                    <ClickableTitle />
+                </div>
                 <h1 className="app-title">────────────────────────────────────────</h1>
+                <UploadButton />
                 <Routes>
                     <Route path="/" element={<VideoList />} />
                     <Route path="/video/:id" element={<VideoPlayerWrapper />} />
+                    <Route path="/upload" element={<VideoUpload />} />
                     <Route path="/user-channel" element={<UserChannelWrapper />} />
                 </Routes>
             </div>
         </Router>
     );
 };
+
+// Clickable title component that redirects to the home page
+const ClickableTitle = () => {
+    return (
+        <Link to="/" className="app-title-button">
+            <h1 className="app-title">. . . . . ╰──╮ PRO ▷ TUBE ╭──╯ . . . . .</h1>
+        </Link>
+    );
+};
+
+const VideoPlayerWrapper = () => <VideoPlayer />;
 
 const VideoPlayerWrapper = () => <VideoPlayer />;
 
@@ -50,5 +68,6 @@ const NavigateToUserChannelButton = () => {
         </button>
     );
 };
+
 
 export default ProTubeApp;
