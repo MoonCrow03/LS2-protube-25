@@ -52,24 +52,8 @@ const LoginButton: React.FC = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('user');  // Elimina la información del usuario del localStorage
-        setUser(null);
-        fetch('http://localhost:8080/api/logout', { //TODO: falta hacer el logout en el oauth Y verificar los tokens
-                                                       //TODO: falta acabar el endpoint para cerrar la sesion en el backend
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // Puedes incluir aquí el token si es necesario para el logout en el servidor
-            },
-        })
-            .then(() => {
-                // Después de la llamada al backend, redirige a la página principal
-                window.location.href = 'http://localhost:5173';  // Redirige a la página principal
-            })
-            .catch((error) => {
-                console.error('Error during logout', error);
-                // En caso de error, también puedes redirigir al usuario a la página principal
-                window.location.href = 'http://localhost:5173';
-            });
+        setUser(null);  // Establece el estado de usuario como null (vuelve a mostrar el botón de login)
+        window.location.href = 'http://localhost:8080/logout';
     };
 
     return (
