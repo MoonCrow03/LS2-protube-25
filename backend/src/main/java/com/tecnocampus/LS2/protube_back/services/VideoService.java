@@ -61,6 +61,15 @@ public class VideoService {
                 .collect(Collectors.toList());
     }
 
+    public List<BasicVideoDTO> getVideoByUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        List<Video> videos = videoRepository.findByUser(user);
+
+        return videos.stream()
+                .map(BasicVideoDTO::new)
+                .collect(Collectors.toList());
+    }
+
     public List<BasicVideoDTO> getAllVideos() {
         List<Video> videos = videoRepository.findAll();
 

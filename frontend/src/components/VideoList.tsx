@@ -48,7 +48,6 @@ const VideoList: React.FC = () => {
 
     return (
         <div>
-            {/* buscador */}
             <input
                 type="text"
                 className="search-bar"
