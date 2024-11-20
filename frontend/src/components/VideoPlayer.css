@@ -9,17 +9,21 @@
     overflow: hidden; /* Ensures content stays inside rounded container */
 }
 
-/* Video player */
 .video-player {
     width: 100%;
     height: auto;
     border-radius: 12px;
     background-color: #000;
-    transition: transform 0.3s ease; /* Smooth hover effect */
+    transition: transform 0.3s ease;
 }
 
+.video-user {
+    font-size: 16px;
+    color: #555;
+    margin-top: 8px;
+    text-align: left;
+}
 
-/* Título del video */
 .videoplayer-title {
     font-size: 32px;
     font-weight: 700;
@@ -33,7 +37,6 @@
     text-align: left;
 }
 
-/* Descripción del video */
 .video-description {
     font-size: 18px;
     color: #555;
@@ -43,7 +46,7 @@
     margin-top: 12px;
     margin-bottom: 30px;
 }
-/* Mensaje de loading */
+
 .loading {
     text-align: center;
     font-size: 18px;
@@ -51,7 +54,6 @@
     margin-top: 20px;
 }
 
-/* Mensaje de error */
 .error {
     text-align: center;
     font-size: 18px;
@@ -72,7 +74,6 @@
     text-align: left;
 }
 
-/* Comment section styling */
 .comments-container {
     margin-top: 20px;
     padding: 16px;
@@ -81,7 +82,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Comment input field */
 .comment-input {
     width: 100%;
     height: 80px;
@@ -95,7 +95,6 @@
     box-sizing: border-box;
 }
 
-/* Submit button for comments */
 .submit-comment {
     padding: 10px 16px;
     background-color: #d63a18;
@@ -109,7 +108,6 @@
     background-color: rgba(246, 46, 6, 0.85);
 }
 
-/* Comment list */
 .comments-list {
     margin-top: 12px;
 }
@@ -119,7 +117,6 @@
     padding: 12px 0;
 }
 
-/* Ajustes de diseño en pantallas pequeñas */
 @media (max-width: 600px) {
     .video-container {
         padding: 8px;
