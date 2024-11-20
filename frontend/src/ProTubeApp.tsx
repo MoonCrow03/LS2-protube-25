@@ -28,8 +28,8 @@ const VideoPlayerWrapper = () => <VideoPlayer />;
 
 const UserChannelWrapper = () => {
     const mockUser = {
-        username: 'john_doe',
-        email: 'john@example.com',
+        username: 'protube-admin',
+        email: '12345@gmail.com',
         picture: 'https://via.placeholder.com/150',
         auth0Id: 'auth0|123456',
     };

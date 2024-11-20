@@ -1,0 +1,35 @@
+.container {
+    padding: 0 24px;
+}
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #c6c6c6;
+}
+.tab-button {
+    padding: 8px 16px;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+}
+.tab-button:hover {
+    border-bottom: 2px solid #1d3557;
+}
+.tab-button.active {
+    border-bottom: 2px solid #1d3557;
+    color: #1d3557;
+    font-weight: 700;
+}
+.tab-page {
+    padding: 24px 16px 16px 16px;
+    display: none;
+}
+.tab-page.active {
+    display: block;
+}
+
+.user-channel {
+    align-items: center;
+    margin-bottom: 16px;
+}
