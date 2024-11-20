@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import './VideoPlayer.css';
 import Comments from './Comments';
 
@@ -11,7 +11,7 @@ interface VideoPlayerProps {
 type VideoStateType =
     | { state: 'loading' }
     | { state: 'error', message: string }
-    | { state: 'success', video: { title: string; videoUrl: string; description: string } };
+    | { state: 'success', video: { title: string; username:string; videoUrl: string; description: string } };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = () => {
     const { id } = useParams<{ id: string }>();
@@ -24,7 +24,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
             .then(data => {
                 setState({
                     state: 'success',
-                    video: { title: data.title, videoUrl: data.videoUrl, description: data.description },
+                    video: { title: data.title, username:data.user, videoUrl: data.videoUrl, description: data.description },
                 });
             })
             .catch(error => {
@@ -45,6 +45,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = () => {
                         <source src={state.video.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
+                    <Link to={`/user-channel/${state.video.username}`} style={{color: 'black', textDecoration: 'none'}}>
+                        <h4 className="video-user">{state.video.username}</h4>
+                    </Link>
                     <h4 className="videoplayer-title">{state.video.title}</h4>
                     <div className="video-description">
                         <p>{state.video.description}</p>
