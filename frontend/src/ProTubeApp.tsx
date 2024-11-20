@@ -3,11 +3,10 @@ import VideoList from './components/VideoList';
 import VideoPlayer from './components/VideoPlayer';
 import UserChannel from './components/UserChannel';
 import LoginButton from "./components/LoginButton.tsx";
-import {BrowserRouter as Router, Route, Routes, useParams} from "react-router-dom";
 import './ProTubeApp.css';
 import VideoUpload from "./components/VideoUpload.tsx";
 import UploadButton from "./components/UploadButton.tsx";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Routes, useParams} from "react-router-dom";
 
 
 const ProTubeApp: React.FC = () => {

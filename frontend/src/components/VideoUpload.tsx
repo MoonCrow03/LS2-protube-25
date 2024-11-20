@@ -7,7 +7,7 @@ const VideoUpload: React.FC = () => {
     const [description, setDescription] = useState("");
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate();
 
     const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
