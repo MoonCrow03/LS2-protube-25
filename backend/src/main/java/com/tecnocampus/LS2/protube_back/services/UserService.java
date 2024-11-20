@@ -7,34 +7,18 @@ import com.tecnocampus.LS2.protube_back.exceptions.UserNotFoundException;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    RestTemplate restTemplate;
-
-
     @Transactional
     public UserDTO createUser(InputUserRecord inputUser){
         User user = new User(inputUser);
         userRepository.save(user);
         return new UserDTO(user);
-    }
-
-    public boolean verifyToken(String token){
-        String url = "https://oauth2.googleapis.com/tokeninfo?id_token=" + token;
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return true;
-        }
-        return false;
     }
 
     public UserDTO getUser(String username){
