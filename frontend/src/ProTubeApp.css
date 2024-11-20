@@ -1,11 +1,48 @@
-.app-title {
+.title-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
 
-    color: #FF5733; /* Color */
-    font-family: 'Roboto', sans-serif; /* Font */
-    font-size: 50px; /* Tamaño de la letra */
+/* Style for the clickable button */
+.app-title-button {
+    text-decoration: none; /* Remove underline */
+    color: white;
+    border-radius: 10px;
+    display: block;
+    border: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+/* Styling for the title */
+.app-title {
+    color: #FF5733;
+    font-family: 'Roboto', sans-serif;
+    font-size: 50px;
     font-weight: bold;
     text-align: center;
     margin: 30px 0;
+    background: linear-gradient(135deg, #ff5733, #ff3300); /* Gradient Background */
+    -webkit-background-clip: text;
+    color: transparent; /* Text color hidden, gradient shown */
+}
+
+/* Hover effect for the clickable title */
+.app-title-button:hover .app-title {
+    transform: scale(1.1); /* Slightly enlarge the title */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+/* Active state effect */
+.app-title-button:active .app-title {
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
 /* Login Button */
