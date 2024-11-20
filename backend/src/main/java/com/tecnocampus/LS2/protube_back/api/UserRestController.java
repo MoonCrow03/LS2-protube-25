@@ -1,10 +1,13 @@
 package com.tecnocampus.LS2.protube_back.api;
 
+import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.UserDTO;
+import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.UserService;
+import com.tecnocampus.LS2.protube_back.services.VideoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,9 @@ public class UserRestController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private VideoService videoService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,5 +50,11 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.FOUND)
     public List<CommentDTO> getUserComments(@PathVariable String username){
         return commentService.getCommentsFromUser(username);
+    }
+
+    @GetMapping("/{username}/videos")
+    @ResponseStatus(HttpStatus.FOUND)
+    public List<BasicVideoDTO> getUserVideos(@PathVariable String username){
+        return videoService.getVideoByUser(username);
     }
 }
