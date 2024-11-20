@@ -1,0 +1,112 @@
+/* Container */
+.upload-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(240, 240, 240, 0.95), rgba(255, 255, 255, 0.9));
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+/* Title */
+.upload-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #d63a18;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    border-bottom: 4px solid #d63a18;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+/* Form */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Label */
+.form-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Input and Textarea */
+.form-input,
+.form-textarea {
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+/* Focus States */
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #d63a18;
+    outline: none;
+}
+
+/* Button */
+.submit-button {
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #d63a18, #f64a1e);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submit-button:hover {
+    background: linear-gradient(135deg, #f64a1e, #d63a18);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .upload-container {
+        padding: 20px;
+    }
+
+    .upload-title {
+        font-size: 28px;
+    }
+
+    .form-input,
+    .form-textarea {
+        font-size: 14px;
+    }
+
+    .submit-button {
+        font-size: 16px;
+    }
+}
