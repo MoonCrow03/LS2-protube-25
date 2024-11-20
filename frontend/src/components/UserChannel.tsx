@@ -24,7 +24,13 @@ const UserChannel: React.FC<UsernameProps> = ({ username }) => {
     useEffect(() => {
         setState({ state: 'loading' });
         fetch(`http://localhost:8080/api/users/${username}`)
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.status != 302) {
+                    // Lanza un error si la respuesta no es exitosa (por ejemplo, 404 o 500)
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then((data) => {
                 const user: User = {
                     username: data.username,
@@ -34,9 +40,9 @@ const UserChannel: React.FC<UsernameProps> = ({ username }) => {
                 };
                 localStorage.setItem('user', JSON.stringify(user));
                 setState({
-                        state: 'success',
-                        user: {username: data.username, email: data.email, picture: data.picture, auth0Id: data.auth0Id}                    }
-                );
+                    state: 'success',
+                    user: { username: data.username, email: data.email, picture: data.picture, auth0Id: data.auth0Id }
+                });
             })
             .catch((error) => {
                 console.error('Error fetching user data:', error);
