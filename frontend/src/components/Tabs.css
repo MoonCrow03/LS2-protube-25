@@ -1,10 +1,29 @@
+.user-channel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.user-channel h1 {
+    font-size: 34px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 16px;
+}
+
 .container {
-    padding: 0 24px;
+    padding: 40px 16px;
+    align-items: center;
 }
 .tabs {
     display: flex;
+    justify-content: center;
+    align-items: center;
     border-bottom: 1px solid #c6c6c6;
 }
+
 .tab-button {
     padding: 8px 16px;
     border-radius: 0;
@@ -12,24 +31,23 @@
     background: transparent;
     border-bottom: 2px solid transparent;
     margin-bottom: -2px;
+    font-size: 24px;
+    font-weight: bold;
 }
+
 .tab-button:hover {
-    border-bottom: 2px solid #1d3557;
+    border-bottom: 2px solid #d63a18;
 }
+
 .tab-button.active {
-    border-bottom: 2px solid #1d3557;
-    color: #1d3557;
+    border-bottom: 2px solid #d63a18;
+    color: #d63a18;
     font-weight: 700;
 }
 .tab-page {
-    padding: 24px 16px 16px 16px;
+    padding: 24px 16px 8px 8px;
     display: none;
 }
 .tab-page.active {
     display: block;
-}
-
-.user-channel {
-    align-items: center;
-    margin-bottom: 16px;
 }
