@@ -103,7 +103,7 @@ public class AppStartupRunner implements ApplicationRunner {
 
         for (VideoJson.F_Comment comment : videoJson.getMeta().getComments()) {
             InputCommentRecord inputCommentRecord = new InputCommentRecord(
-                    "protube-comment",
+                    "protube-admin",
                     videoDTO.getId(),
                     comment.getText()
             );
@@ -116,9 +116,6 @@ public class AppStartupRunner implements ApplicationRunner {
     public void addDefaultUsers() {
         InputUserRecord inputUser = new InputUserRecord("protube-admin", "12345@gmail.com","a","a");
         userService.createUser(inputUser);
-
-        InputUserRecord inputUser2 = new InputUserRecord("protube-comment", "12345@gmail.com","a","a");
-        userService.createUser(inputUser2);
     }
 
     @Override
