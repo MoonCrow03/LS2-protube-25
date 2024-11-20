@@ -7,7 +7,11 @@ interface CommentFormProps {
 
 const CommentForm: React.FC<CommentFormProps> = ({ videoId, onCommentPosted }) => {
     const [newComment, setNewComment] = useState<string>('');
-    const username = 'protube-comment';
+
+    const loggedUser = localStorage.getItem('user');
+    const user = loggedUser ? JSON.parse(loggedUser) : null;
+
+
 
     const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
@@ -15,9 +19,9 @@ const CommentForm: React.FC<CommentFormProps> = ({ videoId, onCommentPosted }) =
     
     const handleCommentSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (newComment.trim() && username.trim()) {
+        if (newComment.trim() && user.username.trim()) {
             const commentData = {
-                username: username,
+                username: user.username,
                 content: newComment,
                 videoId: videoId,
             };
@@ -36,6 +40,14 @@ const CommentForm: React.FC<CommentFormProps> = ({ videoId, onCommentPosted }) =
                 .catch(error => console.error('Error posting comment:', error));
         }
     };
+
+    if (!user) {
+        return (
+            <div className="login-required">
+                <p>You need to be logged in to comment.</p>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={handleCommentSubmit} className="comment-form">

@@ -57,7 +57,13 @@ const LoginButton: React.FC = () => {
     };
 
     const handleProfileClick = () => {
-        navigate('/user-channel/' + user?.username);
+        const loggedUser = localStorage.getItem('user');
+        const user = loggedUser ? JSON.parse(loggedUser) : null;
+
+        if(user)
+            navigate('/user-channel/' + user.username);
+        else
+            console.error('Error fetching user data:', 'User not found');
     };
 
     return (

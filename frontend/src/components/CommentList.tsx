@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 interface Comment {
     id: number;
@@ -17,7 +18,9 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
             {comments.length > 0 ? (
                 comments.map((comment) => (
                     <div key={comment.id} className="comment">
-                        <strong>{comment.user}</strong>
+                        <Link to={`/user-channel/${comment.user}`} style={{color: 'black', textDecoration: 'none'}}>
+                            <strong>{comment.user}</strong>
+                        </Link>
                         <p>{comment.content}</p>
                         <span>{new Date(comment.timestamp).toLocaleString()}</span>
                     </div>
