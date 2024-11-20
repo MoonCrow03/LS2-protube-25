@@ -11,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -53,4 +55,5 @@ public class SecurityConfig {
             }
         };
     }
+
 }
