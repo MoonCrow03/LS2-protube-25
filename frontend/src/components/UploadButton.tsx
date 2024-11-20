@@ -6,9 +6,11 @@ const UploadButton: React.FC = () => {
     const navigate = useNavigate(); // To navigate programmatically
 
     // Hide the button if the current path is `/upload`
-    if (location.pathname === "/upload") {
+    if (location.pathname !== "/user-channel" ) {
         return null;
     }
+
+
 
     return (
         <button className="upload-button" onClick={() => navigate("/upload")}>

@@ -1,4 +1,5 @@
 .app-title {
+
     color: #FF5733; /* Color */
     font-family: 'Roboto', sans-serif; /* Font */
     font-size: 50px; /* Tamaño de la letra */
@@ -7,15 +8,16 @@
     margin: 30px 0;
 }
 
+/* Login Button */
 .login-button {
-    position:absolute;
+    position: absolute;
     top: 5px;
     right: 5px;
     margin: 10px;
     padding: 10px 20px;
     text-align: center;
     text-transform: uppercase;
-    background-size: 100% auto;
+    background: linear-gradient(135deg, #ff5733, #ff3300); /* Match gradient with Upload */
     color: white;
     border-radius: 10px;
     display: block;
@@ -23,25 +25,24 @@
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     box-shadow: 0px 0px 14px -7px #FF5733;
-    background-color: #FF5733;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
 
 .login-button:hover {
-    background-position: right center;
-    /* change the direction of the change here */
-    color: #fff;
-    text-decoration: none;
+    background: linear-gradient(135deg, #ff3300, #ff5733); /* Hover matches Upload's style */
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
 .login-button:active {
     transform: scale(0.95);
 }
 
-
+/* Profile Info for Login Button */
 .login-button.profile-info {
     display: flex;
     align-items: center;
@@ -54,32 +55,32 @@
     margin-right: 8px;
 }
 
+/* Upload Button */
 .upload-button {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     color: white;
-    background: linear-gradient(135deg, #1e90ff, #00bfff);
+    background: linear-gradient(135deg, #ff5733, #ff3300); /* Same colors as Login */
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 0px 14px -7px #FF5733;
     position: fixed; /* Fixed position for better accessibility */
     top: 20px;
     left: 20px;
     z-index: 1000;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover Effects */
+/* Hover Effects for Upload */
 .upload-button:hover {
-    background: linear-gradient(135deg, #00bfff, #1e90ff);
+    background: linear-gradient(135deg, #ff3300, #ff5733); /* Matches Login hover */
     transform: scale(1.1);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
-/* Active State */
+/* Active State for Upload */
 .upload-button:active {
     transform: scale(0.95);
-    background: linear-gradient(135deg, #1c86ee, #008bce);
 }
