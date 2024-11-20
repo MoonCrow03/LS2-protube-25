@@ -65,8 +65,10 @@ const VideoList: React.FC = () => {
                                 src={video.thumbnailUrl}
                                 alt={video.title}
                             />
-                            <h3 className="video-title">{video.title}</h3> {/* Aplica la clase CSS al título */}
-                            <h4 className="video-user">{video.user}</h4> {/* Aplica la clase CSS al título */}
+                            <h3 className="video-title"> {video.title}</h3> {/* Aplica la clase CSS al título */}
+                            <Link to={`/user-channel/${video.user}`} style={{color: 'black', textDecoration: 'none'}}>
+                                <h4 className="video-user">{video.user}</h4>
+                            </Link>
                         </Link>
                     </div>
                 ))}

@@ -57,7 +57,7 @@ const LoginButton: React.FC = () => {
     };
 
     const handleProfileClick = () => {
-        navigate('/user-channel');
+        navigate('/user-channel/' + user?.username);
     };
 
     return (
