@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 interface User {
     username: string;
-    profilePicUrl: string;
+    email: string;
+    picture: string;
+    auth0Id: string;
 }
 
 const LoginButton: React.FC = () => {
@@ -18,20 +20,18 @@ const LoginButton: React.FC = () => {
             // Verifica si se recibe un token después de la redirección desde Okta
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
+            const username = urlParams.get('username');
 
             if (token) {
                 // Realiza una llamada para obtener los datos del usuario usando el token
-                fetch('http://localhost:8080/api/userinfo', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
+                fetch(`http://localhost:8080/api/users/${username}`)
                     .then((response) => response.json())
                     .then((data) => {
                         const user: User = {
                             username: data.username,  // Asegúrate de que el backend pasa el nombre de usuario
-                            profilePicUrl: data.profilePicUrl,  // Asegúrate de que el backend pasa la URL de la imagen
+                            email: data.email,
+                            picture: data.picture,
+                            auth0Id: data.auth0Id
                         };
                         localStorage.setItem('user', JSON.stringify(user));  // Guarda la información en localStorage
                         setUser(user);  // Actualiza el estado con los datos del usuario
@@ -43,14 +43,33 @@ const LoginButton: React.FC = () => {
         }
     }, []);
 
+
+
     const handleLogin = () => {
         window.location.href = 'http://localhost:8080/oauth2/authorization/okta';  // Redirige al usuario para iniciar sesión en Okta
+
     };
 
     const handleLogout = () => {
         localStorage.removeItem('user');  // Elimina la información del usuario del localStorage
-        setUser(null);  // Establece el estado de usuario como null (vuelve a mostrar el botón de login)
-        window.location.href = 'http://localhost:8080/logout';  // Redirige al logout en el backend
+        setUser(null);
+        fetch('http://localhost:8080/api/logout', { //TODO: falta hacer el logout en el oauth Y verificar los tokens
+                                                       //TODO: falta acabar el endpoint para cerrar la sesion en el backend
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Puedes incluir aquí el token si es necesario para el logout en el servidor
+            },
+        })
+            .then(() => {
+                // Después de la llamada al backend, redirige a la página principal
+                window.location.href = 'http://localhost:5173';  // Redirige a la página principal
+            })
+            .catch((error) => {
+                console.error('Error during logout', error);
+                // En caso de error, también puedes redirigir al usuario a la página principal
+                window.location.href = 'http://localhost:5173';
+            });
     };
 
     return (
@@ -59,7 +78,7 @@ const LoginButton: React.FC = () => {
                 'Login'
             ) : (
                 <div className="profile-info">
-                    <img src={user.profilePicUrl} alt="Profile" className="profile-pic" />
+                    <img src={user.picture} alt="Profile" className="profile-pic" />
                     <span>{user.username}</span>
                 </div>
             )}

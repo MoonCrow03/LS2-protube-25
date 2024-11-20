@@ -21,22 +21,16 @@ public class UserDTO {
     private String email;
     private String picture;
     private String auth0Id;
-    private List<VideoDTO> uploadedVideos = new ArrayList<>();
-    private List<LikeDTO> likedVideos = new ArrayList<>();
-    private String password;
+    //private List<VideoDTO> uploadedVideos = new ArrayList<>();
+    //private List<LikeDTO> likedVideos = new ArrayList<>();
 
     public UserDTO(User user){
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.picture = user.getPicture();
         this.auth0Id = user.getAuth0Id();
-        this.uploadedVideos = user.getUploadedVideos().stream().map(VideoDTO::new).toList();
-        this.likedVideos = user.getLikedVideos().stream().map(LikeDTO::new).toList();
+        //this.uploadedVideos = user.getUploadedVideos().stream().map(VideoDTO::new).toList();
+        //this.likedVideos = user.getLikedVideos().stream().map(LikeDTO::new).toList();
 
-    }
-
-    public UserDTO(String username, String password) {
-        this.username = username;
-        this.password = password;
     }
 }
