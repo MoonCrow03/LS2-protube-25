@@ -1,16 +1,20 @@
 package com.tecnocampus.LS2.protube_back.api;
 
-import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.UserDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +37,23 @@ public class UserRestController {
         return userService.createUser(inputUser);
     }
 
+    @PostMapping("/api/logout") //TODO: ACABAR ESTA FUNCION (TINENE QUE CERRAR LA SESION EN EL OAUTH)
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok().build();
+    }
+
+//    @GetMapping("verifyToken/{token}")
+//    public ResponseEntity<UserDTO> verifyToken(@PathVariable String token){
+//        boolean isValid = userService.verifyToken(token);
+//
+//        if (isValid)
+//            UserDTO userDTO = userService
+//            return ResponseEntity.ok(new UserDTO());
+//        else
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is invalid or expired.");
+//    }
+
     @GetMapping("/{username}")
     @ResponseStatus(HttpStatus.FOUND)
     public UserDTO getUser(@PathVariable String username){
@@ -50,6 +71,11 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.FOUND)
     public List<CommentDTO> getUserComments(@PathVariable String username){
         return commentService.getCommentsFromUser(username);
+    }
+
+    @GetMapping("/user")
+    public OidcUser getUserInfo(@AuthenticationPrincipal OidcUser principal) {
+        return principal;
     }
 
     @GetMapping("/{username}/videos")
