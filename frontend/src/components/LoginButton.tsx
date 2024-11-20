@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import '../ProTubeApp.css';
+import {useNavigate} from "react-router-dom";
 
 interface User {
     username: string;
@@ -8,8 +10,8 @@ interface User {
 }
 
 const LoginButton: React.FC = () => {
-    // Estado para el usuario
     const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
 
     // Recuperar la información del usuario desde localStorage o redirección
     useEffect(() => {
@@ -43,8 +45,6 @@ const LoginButton: React.FC = () => {
         }
     }, []);
 
-
-
     const handleLogin = () => {
         window.location.href = 'http://localhost:8080/oauth2/authorization/okta';  // Redirige al usuario para iniciar sesión en Okta
 
@@ -56,17 +56,27 @@ const LoginButton: React.FC = () => {
         window.location.href = 'http://localhost:8080/logout';
     };
 
+    const handleProfileClick = () => {
+        navigate('/user-channel');
+    };
+
     return (
-        <button className="login-button" onClick={!user ? handleLogin : handleLogout}>
+        <div className="login-container">
             {!user ? (
-                'Login'
+                <button className="login-button" onClick={handleLogin}>
+                    Login
+                </button>
             ) : (
-                <div className="profile-info">
-                    <img src={user.picture} alt="Profile" className="profile-pic" />
-                    <span>{user.username}</span>
+                <div className="login-container">
+                    <button className="profile-button" onClick={handleProfileClick}>
+                        <span>{user.username}</span>
+                    </button>
+                    <button className="logout-button" onClick={handleLogout}>
+                        Logout
+                    </button>
                 </div>
             )}
-        </button>
+        </div>
     );
 };
 

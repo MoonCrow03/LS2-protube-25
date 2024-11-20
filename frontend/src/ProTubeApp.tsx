@@ -3,14 +3,13 @@ import VideoList from './components/VideoList';
 import VideoPlayer from './components/VideoPlayer';
 import UserChannel from './components/UserChannel';
 import LoginButton from "./components/LoginButton.tsx";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './ProTubeApp.css';
 
 const ProTubeApp: React.FC = () => {
     return (
         <Router>
             <div className="App">
-                <NavigateToUserChannelButton />
                 <LoginButton />
                 <h1 className="app-title">. . . . . ╰──╮ PRO ▷ TUBE ╭──╯ . . . . .</h1>
                 <h1 className="app-title">────────────────────────────────────────</h1>
@@ -27,6 +26,12 @@ const ProTubeApp: React.FC = () => {
 const VideoPlayerWrapper = () => <VideoPlayer />;
 
 const UserChannelWrapper = () => {
+    const loggedUser = localStorage.getItem('user');
+    const user = loggedUser ? JSON.parse(loggedUser) : null;
+
+    if(user)
+        return <UserChannel {...user} />;
+
     const mockUser = {
         username: 'protube-admin',
         email: '12345@gmail.com',
@@ -35,20 +40,6 @@ const UserChannelWrapper = () => {
     };
 
     return <UserChannel {...mockUser} />;
-};
-
-const NavigateToUserChannelButton = () => {
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate('/user-channel');
-    };
-
-    return (
-        <button onClick={handleClick} className="navigate-button">
-            Go to User Channel
-        </button>
-    );
 };
 
 export default ProTubeApp;
