@@ -78,6 +78,10 @@ public class VideoService {
                 .collect(Collectors.toList());
     }
 
+    public int GetNextID() {
+        return getAllVideos().size();
+    }
+
     public void deleteVideo(Long videoId){
         videoRepository.deleteById(videoId);
     }

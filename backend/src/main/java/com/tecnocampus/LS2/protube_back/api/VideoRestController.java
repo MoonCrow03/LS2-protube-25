@@ -1,5 +1,7 @@
 package com.tecnocampus.LS2.protube_back.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tecnocampus.LS2.protube_back.AppStartupRunner;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,21 +52,26 @@ public class VideoRestController {
             @RequestParam("thumbnail") MultipartFile thumbnailFile,
             @RequestParam("user") String username,
             @RequestParam("duration") Long duration) {
-
         try {
             // Save the video file
-            Path videoPath = Paths.get(videoDirectory, "videos", videoFile.getOriginalFilename());
+
+            String videoName = videoServices.GetNextID()+"";
+
+            Path videoPath = Paths.get(videoDirectory, videoName+".mp4");
             Files.copy(videoFile.getInputStream(), videoPath, StandardCopyOption.REPLACE_EXISTING);
 
             // Save the thumbnail file
-            Path thumbnailPath = Paths.get(videoDirectory, "thumbnails", thumbnailFile.getOriginalFilename());
+            Path thumbnailPath = Paths.get(videoDirectory, videoName+".webp");
             Files.copy(thumbnailFile.getInputStream(), thumbnailPath, StandardCopyOption.REPLACE_EXISTING);
 
             // Store metadata (title, description, userId, etc.) in a database
 
             VideoJson videoJson = new VideoJson(title,username,duration,1920,1080, new VideoJson.Meta(description, new LinkedList<>()));
-            // You can use the videoService to persist the metadata in your database
-            videoServices.createVideo(new InputVideoRecord(title,description,duration,username));
+
+            Path jsonPath = Paths.get(videoDirectory, videoName);
+            saveVideoJson(videoJson,jsonPath);
+
+            addVideoIfNotExists(videoName+".json",username);
 
             return ResponseEntity.ok("Video uploaded successfully!");
         } catch (IOException e) {
@@ -72,6 +80,43 @@ public class VideoRestController {
                     .body("Failed to upload video.");
         }
     }
+
+    private void saveVideoJson(VideoJson videoJson, Path videoPath) throws IOException {
+        // Get the JSON file path (same name as video, but with .json extension)
+        String jsonFileName = videoPath.getFileName().toString() + ".json";
+        Path jsonFilePath = videoPath.getParent().resolve(jsonFileName);
+
+        // Serialize the VideoJson object to the JSON file
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writerWithDefaultPrettyPrinter().writeValue(jsonFilePath.toFile(), videoJson);
+
+        System.out.println("Metadata saved to JSON file: " + jsonFilePath);
+    }
+
+        public void addVideoIfNotExists(String videoFile, String username) {
+            File file = new File(Paths.get(videoDirectory).toString(), videoFile);
+            VideoJson videoJson;
+
+            ObjectMapper objMapper = new ObjectMapper();
+
+            try {
+                videoJson = objMapper.readValue(file, VideoJson.class);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            InputVideoRecord inputVidRecord = new InputVideoRecord(
+                    videoJson.getTitle(),
+                    videoJson.getMeta().getDescription(),
+                    videoJson.getDuration(),
+                    username
+            );
+
+            VideoDTO videoDTO = videoServices.createVideo(inputVidRecord);
+
+
+
+        }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
