@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -59,7 +60,8 @@ public class VideoRestController {
             Files.copy(thumbnailFile.getInputStream(), thumbnailPath, StandardCopyOption.REPLACE_EXISTING);
 
             // Store metadata (title, description, userId, etc.) in a database
-            VideoJson videoJson = new VideoJson(title,username,duration,1920,1080, new VideoJson.Meta(description));
+
+            VideoJson videoJson = new VideoJson(title,username,duration,1920,1080, new VideoJson.Meta(description, new LinkedList<>()));
             // You can use the videoService to persist the metadata in your database
             videoServices.createVideo(new InputVideoRecord(title,description,duration,username));
 
@@ -74,12 +76,6 @@ public class VideoRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VideoDTO createVideo(@Valid @RequestBody InputVideoRecord video) {
-        return videoServices.createVideo(video);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public VideoDTO UploadVideo(@Valid @RequestBody InputVideoRecord video) {
         return videoServices.createVideo(video);
     }
 
