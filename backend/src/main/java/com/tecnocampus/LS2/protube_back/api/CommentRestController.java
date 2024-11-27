@@ -29,7 +29,7 @@ public class CommentRestController {
         return commentService.updateComment(commentId, updateComment);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);

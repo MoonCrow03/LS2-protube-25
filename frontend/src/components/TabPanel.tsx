@@ -50,6 +50,14 @@ const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
         }
     }, [tab, username]);
 
+    const handleUpdateComment = (updatedComment: Comment) => {
+        setComments((prevComments) =>
+            prevComments.map((comment) =>
+                comment.id === updatedComment.id ? updatedComment : comment
+            )
+        );
+    };
+
     return (
         <div>
             {tab === 'Videos' ? (
@@ -78,7 +86,7 @@ const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
             ) : tab === 'Comments' ? (
                 <div>
                     {comments.length > 0 ? (
-                        <CommentList comments={comments} />
+                        <CommentList comments={comments} setComments={handleUpdateComment}/>
                     ) : (
                         <p>No comments available.</p>
                     )}

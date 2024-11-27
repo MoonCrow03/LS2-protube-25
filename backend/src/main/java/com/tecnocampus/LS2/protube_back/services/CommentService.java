@@ -42,7 +42,7 @@ public class CommentService {
     @Transactional
     public CommentDTO updateComment(Long commentId, UpdateCommentRecord updateComment){
         Comment comment = commentRepository.findById(commentId).orElseThrow();
-        comment.setContent(updateComment.newContent());
+        comment.setContent(updateComment.content());
         commentRepository.save(comment);
         return new CommentDTO(comment);
     }

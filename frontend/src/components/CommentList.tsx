@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { HttpStatusCode } from 'axios';
+import CommentForm from './CommentForm';
 
 interface Comment {
     id: number;
@@ -11,50 +11,17 @@ interface Comment {
 
 interface CommentListProps {
     comments: Comment[];
-    setComments: (updatedComment: Comment) => void; // Function to update the comment in parent
+    setComments: (updatedComment: Comment) => void;
 }
 
 const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
-    const [newContent, setNewContent] = useState<string>('');
 
     const loggedUser = localStorage.getItem('user');
     const currentUser = loggedUser ? JSON.parse(loggedUser) : null;
 
-    const handleEditComment = (id: number, currentContent: string) => {
-        setEditingCommentId(id);
-        setNewContent(currentContent);
-    };
-
     const handleCancelEdit = () => {
         setEditingCommentId(null);
-        setNewContent('');
-    };
-
-    const handleSaveComment = async (id: number) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/comments/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ newContent: newContent }),
-            });
-
-            if (response.status !== HttpStatusCode.Ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const updatedComment = await response.json();
-
-            // Update the comment in the parent component
-            setComments(updatedComment);
-
-            setEditingCommentId(null);
-            setNewContent('');
-        } catch (error) {
-            console.error('Error updating comment:', error);
-        }
     };
 
     return (
@@ -69,26 +36,31 @@ const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
                             >
                                 <strong>{comment.user}</strong>
                             </Link>
-                            {currentUser?.username === comment.user && (
-                                <button onClick={() => handleEditComment(comment.id, comment.content)}>
-                                    Edit
-                                </button>
-                            )}
                         </div>
                         {editingCommentId === comment.id ? (
-                            <div>
-                                <input
-                                    type="text"
-                                    value={newContent}
-                                    onChange={(e) => setNewContent(e.target.value)}
-                                />
-                                <button onClick={() => handleSaveComment(comment.id)}>Done</button>
-                                <button onClick={handleCancelEdit}>Cancel</button>
-                            </div>
+                            <CommentForm
+                                videoId={comment.id.toString()} // Use the comment ID as videoId for simplicity
+                                onCommentPosted={(updatedComment) => {
+                                    setComments(updatedComment); // Update the comment in the parent
+                                    setEditingCommentId(null); // Exit editing mode
+                                }}
+                                initialContent={comment.content} // Pass the existing content
+                                onCancel={handleCancelEdit} // Handle cancel action
+                            />
                         ) : (
                             <p>{comment.content}</p>
                         )}
                         <span>{new Date(comment.timestamp).toLocaleString()}</span>
+                        {currentUser?.username === comment.user && editingCommentId !== comment.id && (
+                            <div>
+                                <button
+                                    className="submit-comment"
+                                    onClick={() => setEditingCommentId(comment.id)}
+                                >
+                                    Edit
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ))
             ) : (
@@ -99,4 +71,5 @@ const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
 };
 
 export default CommentList;
+
 
