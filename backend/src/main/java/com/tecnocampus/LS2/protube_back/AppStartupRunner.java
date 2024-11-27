@@ -1,10 +1,12 @@
 package com.tecnocampus.LS2.protube_back;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
 import com.tecnocampus.LS2.protube_back.services.UserService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
@@ -36,8 +38,9 @@ public class AppStartupRunner implements ApplicationRunner {
     private final UserService userService;
     private final CommentService commentService;
     private final ObjectMapper objMapper;
+    private final UserRepository userRepository;
 
-    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoService videoService, UserService userService, CommentService commentService) {
+    public AppStartupRunner(Environment env, ObjectMapper objectMapper, VideoService videoService, UserService userService, CommentService commentService, UserRepository userRepository) {
         this.env = env;
         final var rootDir = env.getProperty("pro_tube.store.dir");
         this.rootPath = Paths.get(rootDir);
@@ -46,6 +49,7 @@ public class AppStartupRunner implements ApplicationRunner {
         this.videoService = videoService;
         this.userService = userService;
         this.commentService = commentService;
+        this.userRepository = userRepository;
     }
 
     @PostConstruct
@@ -91,19 +95,20 @@ public class AppStartupRunner implements ApplicationRunner {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        addIfUnexistentUser(videoJson.getUser());
         InputVideoRecord inputVidRecord = new InputVideoRecord(
                 videoJson.getTitle(),
                 videoJson.getMeta().getDescription(),
                 videoJson.getDuration(),
-                "protube-admin"
+                videoJson.getUser()
         );
 
         VideoDTO videoDTO = videoService.createVideo(inputVidRecord);
 
         for (VideoJson.F_Comment comment : videoJson.getMeta().getComments()) {
+            addIfUnexistentUser(comment.getAuthor());
             InputCommentRecord inputCommentRecord = new InputCommentRecord(
-                    "protube-admin",
+                    comment.getAuthor(),
                     videoDTO.getId(),
                     comment.getText()
             );
@@ -116,6 +121,14 @@ public class AppStartupRunner implements ApplicationRunner {
     public void addDefaultUsers() {
         InputUserRecord inputUser = new InputUserRecord("protube-admin", "12345@gmail.com","a","a");
         userService.createUser(inputUser);
+    }
+
+
+    public void addIfUnexistentUser(String username){
+       if(!userService.userExist(username)){
+           String emailUser = username.replaceAll("\\s+", "").toLowerCase() + "@gmail.com";
+           userService.createUser(new InputUserRecord(username, emailUser,"a","1"));
+       }
     }
 
     @Override
