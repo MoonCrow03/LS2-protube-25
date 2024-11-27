@@ -1,66 +1,58 @@
 import React from 'react';
-import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import VideoPlayer from '../VideoPlayer';
 import { BrowserRouter } from 'react-router-dom';
-import UserChannel from '../UserChannel';
 import fetchMock from 'jest-fetch-mock';
-
-fetchMock.enableMocks();
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useParams: () => ({ id: '0' }),
+}));
 
 const renderWithRouter = (ui: React.ReactElement) => {
     return render(<BrowserRouter>{ui}</BrowserRouter>);
 };
 
-describe('UserChannel Component', () => {
+describe('VideoPlayer Component', () => {
+    const mockVideoData = {
+        title: 'Bruno Mars - 24K Magic (Official Music Video)',
+        videoUrl: 'http://localhost:8080/api/videos/0',
+        description: 'The official music video for Bruno Mars\' "24K Magic".'
+    };
+
     beforeEach(() => {
         fetchMock.resetMocks();
+        fetchMock.enableMocks();
+    })
+
+    it('displays loading state initially', () => {
+        renderWithRouter(<VideoPlayer />);
+        expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
     });
 
-    test('renders loading state initially', () => {
-        renderWithRouter(<UserChannel username="testuser" />);
-        expect(screen.getByText(/loading.../i)).toBeInTheDocument();
+    it('displays a video player and title when data is successfully fetched', async () => {
+        fetchMock.mockIf(/api\/videos\/0/, async () => Promise.resolve({body: JSON.stringify(mockVideoData)}));
+
+        renderWithRouter(<VideoPlayer />);
+
+        await waitFor(() => {
+            // Check if the video element is rendered with the correct src
+            const videoElement = screen.getByTestId('video-player');
+            expect(videoElement).toBeInTheDocument();
+        });
+
+        expect( screen.getByTestId('video-player').querySelector('source')).toHaveAttribute('src', mockVideoData.videoUrl);
+        // Check if the title element is rendered with the correct text
+        expect(screen.getByText(mockVideoData.title)).toBeInTheDocument();
     });
 
-    test('renders user data when fetch is successful', async () => {
-        fetchMock.mockResponseOnce(
-            JSON.stringify({
-                username: 'testuser',
-                email: 'testuser@example.com',
-                picture: 'http://example.com/picture.jpg',
-                auth0Id: 'auth0|12345',
-            }),
-            { status: 302 }
-        );
 
-        renderWithRouter(<UserChannel username="testuser" />);
+    it('displays an error message if the fetch fails', async () => {
+        fetchMock.mockRejectedValue(new Error('Failed to fetch'));
 
-        // Wait for the data to be rendered
-        await waitFor(() => expect(screen.getByText('testuser')).toBeInTheDocument());
-
-        // Check if user details are displayed correctly
-        expect(screen.getByText('testuser')).toBeInTheDocument();
-        expect(screen.getByAltText('testuser')).toHaveAttribute('src', 'http://example.com/picture.jpg');
+        renderWithRouter(<VideoPlayer />);
+        await waitFor(() => {
+            expect(screen.getByText(/Error loading video. Please try again later./i)).toBeInTheDocument();
+        });
     });
-
-    test('renders error message when fetch fails', async () => {
-        fetchMock.mockRejectOnce(new Error('Failed to fetch'));
-
-        renderWithRouter(<UserChannel username="testuser" />);
-
-        // Wait for the error message to appear
-        await waitFor(() =>
-            expect(screen.getByText(/error loading channel/i)).toBeInTheDocument()
-        );
-    });
-
-    test('renders error message for non-302 HTTP response', async () => {
-        fetchMock.mockResponseOnce('Not Found', { status: 404 });
-
-        renderWithRouter(<UserChannel username="testuser" />);
-
-        // Wait for the error message to appear
-        await waitFor(() =>
-            expect(screen.getByText(/error loading channel/i)).toBeInTheDocument()
-        );
-    });
-});
+})
