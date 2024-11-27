@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import {useNavigate, useParams} from "react-router-dom"; // Import useNavigate
 import "./VideoUpload.css";
 
 const VideoUpload: React.FC = () => {
+    const loggedUser = localStorage.getItem('user');
+    const user = loggedUser ? JSON.parse(loggedUser) : null;
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [duration, setDuration] = useState<number | null>(null);
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const navigate = useNavigate();
@@ -20,30 +23,54 @@ const VideoUpload: React.FC = () => {
             setThumbnailFile(e.target.files[0]);
         }
     };
+    const getVideoDuration = (file: File) => {
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.onloadedmetadata = () => {
+            setDuration(video.duration); // Set the duration of the video
+        };
+    };
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!title || !description || !videoFile || !thumbnailFile) {
-            alert("Please fill in all fields and upload both files.");
+
+        if (!videoFile || !thumbnailFile) {
+            alert("Please fill in all fields and upload the required files.");
             return;
         }
+        if (videoFile) {
+            getVideoDuration(videoFile);
+        }
+
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
         formData.append("video", videoFile);
         formData.append("thumbnail", thumbnailFile);
+        formData.append("user", user.username);
+        formData.append("duration", 2);
 
-        // Simulate upload logic
-        console.log("Form data submitted:");
-        for (const [key, value] of formData.entries()) {
-            console.log(key, value);
+        try {
+            const response = await fetch('http://localhost:8080/api/videos/upload', {
+                method : 'POST',
+                body : formData
+            } as RequestInit);
+
+            if (response.ok) {
+                const message = await response.text();
+                alert(message);
+                navigate(`/user-channel/${user.username}`); // Redirect to user's videos page
+            } else {
+                const errorMessage = await response.text();
+                alert(`Error: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error("Error uploading video:", error);
+            alert("Failed to upload video.");
         }
-
-        alert("Video uploaded successfully!");
-
-        // Redirect to the base URL
-        navigate("/");
     };
+
 
     return (
         <div className="upload-container">
