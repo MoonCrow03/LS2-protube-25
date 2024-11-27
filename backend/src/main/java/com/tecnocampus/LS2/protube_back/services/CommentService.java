@@ -5,6 +5,7 @@ import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
+import com.tecnocampus.LS2.protube_back.dto.record.UpdateCommentRecord;
 import com.tecnocampus.LS2.protube_back.persistence.CommentRepository;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
@@ -35,6 +36,14 @@ public class CommentService {
         video.addComment(comment);
         commentRepository.save(comment);
         videoRepository.save(video);
+        return new CommentDTO(comment);
+    }
+
+    @Transactional
+    public CommentDTO updateComment(Long commentId, UpdateCommentRecord updateComment){
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        comment.setContent(updateComment.newContent());
+        commentRepository.save(comment);
         return new CommentDTO(comment);
     }
 
