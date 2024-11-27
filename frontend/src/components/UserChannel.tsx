@@ -44,8 +44,12 @@ const UserChannel: React.FC<UsernameProps> = ({ username }) => {
         default:
             return (
                 <div className="user-channel">
-                    <img src={state.user.picture} alt={state.user.username}/>
+                    <img src={state.user.picture}
+                         alt={state.user.username}
+                         //onError={(e) => (e.currentTarget.src = '/assets/default_pic.png')}/>
+                    />
                     <h1>{state.user.username}</h1>
+                    <h2 style={{fontSize: '18px', color: '#555'}}>{state.user.email}</h2>
                     <TabButtons username={state.user.username}/>
                 </div>
             );
