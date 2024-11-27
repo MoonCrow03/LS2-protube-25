@@ -11,10 +11,12 @@ interface Comment {
 
 interface CommentListProps {
     comments: Comment[];
-    setComments: (updatedComment: Comment) => void;
+    setComments: React.Dispatch<React.SetStateAction<Comment[]>>
+    updateComment: (updatedComment: Comment) => void;
+    url: string;
 }
 
-const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
+const CommentList: React.FC<CommentListProps> = ({ comments, setComments, updateComment, url }) => {
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 
     const loggedUser = localStorage.getItem('user');
@@ -22,6 +24,31 @@ const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
 
     const handleCancelEdit = () => {
         setEditingCommentId(null);
+    };
+
+    const handleDeleteComment = (commentId: number) => {
+        if (window.confirm('Are you sure you want to delete this comment?')) {
+            fetch(`http://localhost:8080/api/comments/${commentId}`, {
+                method: 'DELETE',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete comment');
+                    }
+                    // Re-fetch the updated comments list
+                    return fetch(url, { method: 'GET' });
+                })
+                .then((response) => {
+                    if(!(response.status === 302 )){
+                        throw new Error('Failed to fetch comments');
+                    }
+                    return response.json();
+                })
+                .then((updatedComments) => {
+                    setComments(updatedComments); // Update the state with the new list
+                })
+                .catch((error) => console.error('Error handling delete:', error));
+        }
     };
 
     return (
@@ -41,7 +68,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
                             <CommentForm
                                 videoId={comment.id.toString()} // Use the comment ID as videoId for simplicity
                                 onCommentPosted={(updatedComment) => {
-                                    setComments(updatedComment); // Update the comment in the parent
+                                    updateComment(updatedComment); // Update the comment in the parent
                                     setEditingCommentId(null); // Exit editing mode
                                 }}
                                 initialContent={comment.content} // Pass the existing content
@@ -58,6 +85,12 @@ const CommentList: React.FC<CommentListProps> = ({ comments, setComments }) => {
                                     onClick={() => setEditingCommentId(comment.id)}
                                 >
                                     Edit
+                                </button>
+                                <button
+                                    className="submit-comment"
+                                    onClick={() => handleDeleteComment(comment.id)}
+                                >
+                                    Delete
                                 </button>
                             </div>
                         )}

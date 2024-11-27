@@ -41,7 +41,7 @@ const Comments: React.FC<CommentsProps> = ({ videoId }) => {
     return (
         <div className="comments-container">
             <CommentForm videoId={videoId} onCommentPosted={handleNewComment} />
-            <CommentList comments={comments} setComments={handleUpdateComment} />
+            <CommentList comments={comments} setComments={setComments} updateComment={handleUpdateComment} url={`http://localhost:8080/api/videos/${videoId}/comments`}/>
         </div>
     );
 };

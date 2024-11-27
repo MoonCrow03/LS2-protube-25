@@ -9,6 +9,7 @@ import com.tecnocampus.LS2.protube_back.dto.record.UpdateCommentRecord;
 import com.tecnocampus.LS2.protube_back.persistence.CommentRepository;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,18 @@ public class CommentService {
         return new CommentDTO(comment);
     }
 
-    public void deleteComment(Long commentId){
-        commentRepository.deleteById(commentId);
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        Video video = comment.getVideo();
+        if (video != null) {
+            video.getCommentList().remove(comment);
+            videoRepository.save(video); // Save updated video
+        }
+
+        commentRepository.delete(comment);
     }
 
     public CommentDTO getComment(Long commentId){

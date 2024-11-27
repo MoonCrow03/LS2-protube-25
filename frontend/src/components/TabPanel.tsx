@@ -86,7 +86,7 @@ const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
             ) : tab === 'Comments' ? (
                 <div>
                     {comments.length > 0 ? (
-                        <CommentList comments={comments} setComments={handleUpdateComment}/>
+                        <CommentList comments={comments} setComments={setComments} updateComment={handleUpdateComment} url={`http://localhost:8080/api/users/${username}/comments`}/>
                     ) : (
                         <p>No comments available.</p>
                     )}
