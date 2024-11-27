@@ -42,6 +42,10 @@ public class UserService {
         return new UserDTO(user);
     }
 
+    public boolean userExist(String username){
+        return userRepository.existsByUsername(username);
+    }
+
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }
