@@ -1,9 +1,9 @@
 import React from 'react';
-import fetchMock from 'jest-fetch-mock';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import CommentForm from '../CommentForm';
+import fetchMock from 'jest-fetch-mock';
 fetchMock.enableMocks();
 
 const renderWithRouter = (ui: React.ReactElement) => {

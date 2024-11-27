@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import CommentList from "./CommentList.tsx";
+import CommentList from "./CommentList";
 import './VideoList.css';
 
 interface UsernameProps {
@@ -25,11 +25,16 @@ interface Comment {
     timestamp: string;
 }
 
-type TabType = 'Videos' | 'Comments';
+type TabType = 'Videos' | 'Comments' | 'Invalid';
 
 const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
     const [videos, setVideos] = useState<Video[]>([]);
     const [comments, setComments] = useState<Comment[]>([]);
+
+    if (tab !== 'Videos' && tab !== 'Comments') {
+        console.error(`Invalid tab: ${tab}`);
+        return null;
+    }
 
     useEffect(() => {
         if (tab === 'Videos') {
