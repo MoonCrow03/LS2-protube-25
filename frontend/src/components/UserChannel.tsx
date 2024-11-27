@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import TabButtons from "./TabButtons.tsx";
+import TabButtons from "./TabButtons";
 import "./Tabs.css";
 
 interface UsernameProps {
