@@ -13,7 +13,6 @@ const LoginButton: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 
-    // Recuperar la información del usuario desde localStorage o redirección
     useEffect(() => {
         const loggedInUser = localStorage.getItem('user');
         if (loggedInUser) {
@@ -30,7 +29,7 @@ const LoginButton: React.FC = () => {
                     .then((response) => response.json())
                     .then((data) => {
                         const user: User = {
-                            username: data.username,  // Asegúrate de que el backend pasa el nombre de usuario
+                            username: data.username,
                             email: data.email,
                             picture: data.picture,
                             auth0Id: data.auth0Id

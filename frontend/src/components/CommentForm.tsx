@@ -11,20 +11,25 @@ const CommentForm: React.FC<CommentFormProps> = ({ videoId, onCommentPosted }) =
     const loggedUser = localStorage.getItem('user');
     const user = loggedUser ? JSON.parse(loggedUser) : null;
 
-
-
     const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
     };
     
     const handleCommentSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (newComment.trim() && user.username.trim()) {
+
+        if (!newComment.trim()) {
+            console.warn("Empty comment cannot be submitted.");
+            return;
+        }
+
+        if (user.username.trim()) {
             const commentData = {
                 username: user.username,
                 content: newComment,
                 videoId: videoId,
             };
+
             fetch(`http://localhost:8080/api/videos/${videoId}/comments`, {
                 method: 'POST',
                 headers: {
@@ -35,7 +40,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ videoId, onCommentPosted }) =
                 .then(response => response.json())
                 .then((comment) => {
                     onCommentPosted(comment);
-                    setNewComment(comment.content);
+                    setNewComment('');
                 })
                 .catch(error => console.error('Error posting comment:', error));
         }
