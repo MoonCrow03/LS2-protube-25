@@ -44,17 +44,6 @@ public class UserRestController {
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("verifyToken/{token}")
-//    public ResponseEntity<UserDTO> verifyToken(@PathVariable String token){
-//        boolean isValid = userService.verifyToken(token);
-//
-//        if (isValid)
-//            UserDTO userDTO = userService
-//            return ResponseEntity.ok(new UserDTO());
-//        else
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is invalid or expired.");
-//    }
-
     @GetMapping("/{username}")
     @ResponseStatus(HttpStatus.FOUND)
     public UserDTO getUser(@PathVariable String username){

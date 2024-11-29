@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TabButtons from "./TabButtons";
 import "./Tabs.css";
+import defaultPic from "../assets/default_pic.png";
 
 interface UsernameProps {
     username: string;
@@ -44,8 +45,15 @@ const UserChannel: React.FC<UsernameProps> = ({ username }) => {
         default:
             return (
                 <div className="user-channel">
-                    <img src={state.user.picture} alt={state.user.username}/>
+                    <object data={state.user.picture}>
+                        <img src={defaultPic}
+                             alt={state.user.username}
+                        />
+                    </object>
+
+
                     <h1>{state.user.username}</h1>
+                    <h2 style={{fontSize: '18px', color: '#555'}}>{state.user.email}</h2>
                     <TabButtons username={state.user.username}/>
                 </div>
             );

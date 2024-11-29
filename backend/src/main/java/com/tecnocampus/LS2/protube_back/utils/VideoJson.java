@@ -34,7 +34,7 @@ public class VideoJson {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class F_Comment {
-        private String user;
+        private String author;
         private String text;
     }
 }
