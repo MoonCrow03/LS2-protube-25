@@ -14,6 +14,43 @@
     cursor: pointer; /* Cambia el cursor al pasar */
 }
 
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Pushes buttons to opposite corners */
+    align-items: center; /* Centers buttons vertically */
+    width: 100%; /* Ensure the container spans the full width */
+}
+
+.edit-button {
+    padding: 6px 16px;
+    background-color: #ffcd39;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */
+}
+
+.edit-button:hover {
+    background-color: #e6b133; /* Slightly darker shade for hover */
+    transform: scale(1.05); /* Slight zoom-in effect */
+}
+
+.delete-button {
+    padding: 6px 16px;
+    background-color: #ED2939;
+    color: white;
+    border: black;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */
+}
+
+.delete-button:hover {
+    background-color: #c2202f; /* Slightly darker shade for hover */
+    transform: scale(1.05); /* Slight zoom-in effect */
+}
+
 .video-item:hover {
     transform: scale(1.05); /* Escala hacia arriba cuando hace hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa cuando hace hover */

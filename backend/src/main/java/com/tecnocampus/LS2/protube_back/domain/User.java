@@ -33,7 +33,7 @@ public class User {
 
     private String picture;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Video> uploadedVideos;
 
     @OneToMany

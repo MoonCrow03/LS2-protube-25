@@ -2,12 +2,14 @@ package com.tecnocampus.LS2.protube_back.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tecnocampus.LS2.protube_back.AppStartupRunner;
+import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
+import com.tecnocampus.LS2.protube_back.services.UserService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import com.tecnocampus.LS2.protube_back.utils.VideoJson;
 import jakarta.validation.Valid;
@@ -36,6 +38,9 @@ public class VideoRestController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private UserService userService;
 
     private final String videoDirectory;
 
@@ -145,8 +150,24 @@ public class VideoRestController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteVideo(@PathVariable Long id) {
+        BasicVideoDTO video = videoServices.getVideoById(id);
+
+        Path videoPath = Paths.get(videoDirectory, video.getId()+".mp4");
+        Path JSONPath = Paths.get(videoDirectory, video.getId()+".json");
+        Path thumbnailPath = Paths.get(videoDirectory, video.getId()+".webp");
+
+        try {
+            Files.delete(videoPath);
+            Files.delete(JSONPath);
+            Files.delete(thumbnailPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         videoServices.deleteVideo(id);
+
     }
+
+
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.FOUND)
