@@ -1,12 +1,14 @@
 package com.tecnocampus.LS2.protube_back.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tecnocampus.LS2.protube_back.domain.Comment;
 import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.dto.record.UpdateVideoRecord;
 import com.tecnocampus.LS2.protube_back.exceptions.UserNotFoundException;
 import com.tecnocampus.LS2.protube_back.exceptions.VideoBadPostRequest;
 import com.tecnocampus.LS2.protube_back.exceptions.VideoNotFoundException;
@@ -106,6 +108,14 @@ public class VideoService {
 
 
         videoRepository.deleteById(videoId);
+    }
+
+    public VideoDTO UpdateVideo(Long videoId, UpdateVideoRecord updatedVideo) {
+        Video video = videoRepository.findById(videoId).orElseThrow();
+        video.setTitle(updatedVideo.title());
+        video.setDescription(updatedVideo.description());
+        videoRepository.save(video);
+        return new VideoDTO(video);
     }
 }
 

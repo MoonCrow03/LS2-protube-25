@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import CommentList from "./CommentList";
 import './VideoList.css';
 import url from "url";
@@ -31,6 +31,7 @@ type TabType = 'Videos' | 'Comments' | 'Invalid';
 const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
     const [videos, setVideos] = useState<Video[]>([]);
     const [comments, setComments] = useState<Comment[]>([]);
+    const navigate = useNavigate();
 
     const loggedUser = localStorage.getItem('user');
     const currentUser = loggedUser ? JSON.parse(loggedUser) : null;
@@ -41,12 +42,12 @@ const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
     }
 
     const handleVideoEditing = (videoId: number) => {
-
+        navigate(`/video-edit/${videoId}`);
     }
 
     const handleDeleteVideo = (videoId : number) => {
         if (window.confirm('Are you sure you want to delete this video?')) {
-            fetch(`http://localhost:8080/api/videos/${videoId-1}`, {
+            fetch(`http://localhost:8080/api/videos/${videoId}`, {
                 method: 'DELETE',
             })
                 .then((response) => {
