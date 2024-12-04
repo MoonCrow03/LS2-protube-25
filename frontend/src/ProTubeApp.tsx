@@ -7,6 +7,7 @@ import './ProTubeApp.css';
 import VideoUpload from "./components/VideoUpload.tsx";
 import UploadButton from "./components/UploadButton.tsx";
 import {BrowserRouter as Router, Link, Route, Routes, useParams} from "react-router-dom";
+import VideoEdit from "./components/VideoEdit.tsx";
 
 
 const ProTubeApp: React.FC = () => {
@@ -24,6 +25,7 @@ const ProTubeApp: React.FC = () => {
                     <Route path="/video/:id" element={<VideoPlayerWrapper />} />
                     <Route path="/user-channel/:username" element={<UserChannelWrapper />} />
                     <Route path="/upload" element={<VideoUpload />} />
+                    <Route path="/video-edit/:videoId" element={<VideoEdit/>} />
                 </Routes>
             </div>
         </Router>

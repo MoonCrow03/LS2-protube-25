@@ -2,14 +2,19 @@ package com.tecnocampus.LS2.protube_back.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tecnocampus.LS2.protube_back.AppStartupRunner;
+import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.dto.record.UpdateCommentRecord;
+import com.tecnocampus.LS2.protube_back.dto.record.UpdateVideoRecord;
 import com.tecnocampus.LS2.protube_back.services.CommentService;
+import com.tecnocampus.LS2.protube_back.services.UserService;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import com.tecnocampus.LS2.protube_back.utils.VideoJson;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -36,6 +41,9 @@ public class VideoRestController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private UserService userService;
 
     private final String videoDirectory;
 
@@ -93,7 +101,7 @@ public class VideoRestController {
         System.out.println("Metadata saved to JSON file: " + jsonFilePath);
     }
 
-        public void addVideoIfNotExists(String videoFile, String username) {
+    public void addVideoIfNotExists(String videoFile, String username) {
             File file = new File(Paths.get(videoDirectory).toString(), videoFile);
             VideoJson videoJson;
 
@@ -116,12 +124,49 @@ public class VideoRestController {
 
 
 
-        }
+    }
+
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VideoDTO createVideo(@Valid @RequestBody InputVideoRecord video) {
         return videoServices.createVideo(video);
+    }
+
+    @PatchMapping("/{videoId}")
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDTO updateVideo(@PathVariable Long videoId, @RequestParam("title") String title,
+                                  @RequestParam("description") String description,
+                                  @Nullable @RequestParam("thumbnail") MultipartFile thumbnailFile) {
+
+
+        File file = new File(Paths.get(videoDirectory).toString(), videoId-1+".json");
+        VideoJson videoJson;
+
+        ObjectMapper objMapper = new ObjectMapper();
+
+        Path jsonPath = Paths.get(videoDirectory, videoId-1+"");
+
+        try {
+            videoJson = objMapper.readValue(file, VideoJson.class);
+            videoJson.setTitle(title);
+            videoJson.setMeta(new VideoJson.Meta(description, videoJson.getMeta().getComments()));
+            saveVideoJson(videoJson,jsonPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (thumbnailFile != null) {
+            Path thumbnailPath = Paths.get(videoDirectory, videoId-1 + ".webp");
+            try {
+                Files.copy(thumbnailFile.getInputStream(), thumbnailPath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return videoServices.UpdateVideo(videoId,new UpdateVideoRecord(title,description));
     }
 
     @GetMapping("/title/{videoTitle}")
@@ -145,8 +190,24 @@ public class VideoRestController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteVideo(@PathVariable Long id) {
+        BasicVideoDTO video = videoServices.getVideoById(id);
+
+        Path videoPath = Paths.get(videoDirectory, video.getId()-1+".mp4");
+        Path JSONPath = Paths.get(videoDirectory, video.getId()-1+".json");
+        Path thumbnailPath = Paths.get(videoDirectory, video.getId()-1+".webp");
+
+        try {
+            Files.delete(videoPath);
+            Files.delete(JSONPath);
+            Files.delete(thumbnailPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         videoServices.deleteVideo(id);
+
     }
+
+
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.FOUND)
@@ -166,5 +227,7 @@ public class VideoRestController {
     public List<CommentDTO> getVideoComments(@PathVariable Long videoId) {
         return commentService.getCommentsFromVideo(videoId);
     }
+
+
 
 }

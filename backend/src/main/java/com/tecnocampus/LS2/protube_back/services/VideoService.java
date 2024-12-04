@@ -1,17 +1,21 @@
 package com.tecnocampus.LS2.protube_back.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tecnocampus.LS2.protube_back.domain.Comment;
 import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
 import com.tecnocampus.LS2.protube_back.dto.BasicVideoDTO;
+import com.tecnocampus.LS2.protube_back.dto.CommentDTO;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputVideoRecord;
+import com.tecnocampus.LS2.protube_back.dto.record.UpdateVideoRecord;
 import com.tecnocampus.LS2.protube_back.exceptions.UserNotFoundException;
 import com.tecnocampus.LS2.protube_back.exceptions.VideoBadPostRequest;
 import com.tecnocampus.LS2.protube_back.exceptions.VideoNotFoundException;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,9 @@ public class VideoService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentService commentService;
 
     @Transactional
     public VideoDTO createVideo(InputVideoRecord inputVideo) {
@@ -83,7 +90,32 @@ public class VideoService {
     }
 
     public void deleteVideo(Long videoId){
+
+        List<CommentDTO> comments= commentService.getCommentsFromVideo(videoId);
+
+        for (CommentDTO comment : comments) {
+            commentService.deleteComment(comment.getId());
+        }
+
+        Video video = videoRepository.findById(videoId)
+                .orElseThrow(() -> new EntityNotFoundException("Video not found with id " + videoId));
+
+        User user = video.getUser();
+        if (user != null) {
+            user.getUploadedVideos().remove(video); // Remove video from user's uploadedVideos
+            userRepository.save(user); // Update the user entity
+        }
+
+
         videoRepository.deleteById(videoId);
+    }
+
+    public VideoDTO UpdateVideo(Long videoId, UpdateVideoRecord updatedVideo) {
+        Video video = videoRepository.findById(videoId).orElseThrow();
+        video.setTitle(updatedVideo.title());
+        video.setDescription(updatedVideo.description());
+        videoRepository.save(video);
+        return new VideoDTO(video);
     }
 }
 

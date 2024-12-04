@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import CommentList from "./CommentList";
 import './VideoList.css';
+import url from "url";
 
 interface UsernameProps {
     username: string;
@@ -30,11 +31,45 @@ type TabType = 'Videos' | 'Comments' | 'Invalid';
 const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
     const [videos, setVideos] = useState<Video[]>([]);
     const [comments, setComments] = useState<Comment[]>([]);
+    const navigate = useNavigate();
+
+    const loggedUser = localStorage.getItem('user');
+    const currentUser = loggedUser ? JSON.parse(loggedUser) : null;
 
     if (tab !== 'Videos' && tab !== 'Comments') {
         console.error(`Invalid tab: ${tab}`);
         return null;
     }
+
+    const handleVideoEditing = (videoId: number) => {
+        navigate(`/video-edit/${videoId}`);
+    }
+
+    const handleDeleteVideo = (videoId : number) => {
+        if (window.confirm('Are you sure you want to delete this video?')) {
+            fetch(`http://localhost:8080/api/videos/${videoId}`, {
+                method: 'DELETE',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete video');
+                    }
+                    // Re-fetch the updated comments list
+                    return fetch(`http://localhost:8080/api/users/${username}/videos`, { method: 'GET' });
+                })
+                .then((response) => {
+                    if(!(response.status === 302 )){
+                        throw new Error('Failed to fetch video');
+                    }
+                    return response.json();
+                })
+                .then((updatedVideos) => {
+                    setVideos(updatedVideos); // Update the state with the new list
+                })
+                .catch((error) => console.error('Error handling delete:', error));
+        }
+    }
+
 
     useEffect(() => {
         if (tab === 'Videos') {
@@ -76,6 +111,22 @@ const TabPanel: React.FC<UsernameProps> = ({ username, tab }) => {
                                         <h3 className="video-title">{video.title}</h3> {/* Apply CSS to the title */}
                                         <h4 className="video-user">{video.user}</h4> {/* Apply CSS to the user */}
                                     </Link>
+                                    {currentUser?.username === video.user && (
+                                        <div className="button-container">
+                                            <button
+                                                className="edit-button"
+                                                onClick={() => handleVideoEditing(video.id)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="delete-button"
+                                                onClick={() => handleDeleteVideo(video.id)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )}
                                 </li>
                             ))}
                         </ul>
