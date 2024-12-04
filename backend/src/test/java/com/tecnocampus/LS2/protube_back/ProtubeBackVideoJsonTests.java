@@ -163,6 +163,11 @@ class ProtubeBackVideoJsonTests {
 	}
 
 	@Test
+	void createVideoWithFiles(){
+
+	}
+
+	@Test
 	void getAllVideosTest() throws Exception {
 		mockMvc.perform(post("/api/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -217,4 +222,5 @@ class ProtubeBackVideoJsonTests {
 	}
 
 	//TODO: provar a pujar files de videos reals, per poder fer el delete. Mes el testos dels comentaris.
+	//TODO: obtenir videos amb la lupa.
 }
