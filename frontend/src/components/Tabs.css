@@ -13,6 +13,26 @@
     margin-bottom: 16px;
 }
 
+.user-channel-object{
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.user-channel-img{
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
 .container {
     padding: 40px 16px;
     align-items: center;
@@ -51,3 +71,4 @@
 .tab-page.active {
     display: block;
 }
+

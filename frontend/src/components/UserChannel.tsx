@@ -45,8 +45,10 @@ const UserChannel: React.FC<UsernameProps> = ({ username }) => {
         default:
             return (
                 <div className="user-channel">
-                    <object data={state.user.picture}>
-                        <img src={defaultPic}
+                    <object className="user-channel-object"
+                        data={state.user.picture}>
+                        <img className="user-channel-img"
+                            src={defaultPic}
                              alt={state.user.username}
                         />
                     </object>
