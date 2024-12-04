@@ -2,6 +2,7 @@ package com.tecnocampus.LS2.protube_back;
 
 import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.domain.Video;
+import com.tecnocampus.LS2.protube_back.persistence.CommentRepository;
 import com.tecnocampus.LS2.protube_back.persistence.UserRepository;
 import com.tecnocampus.LS2.protube_back.persistence.VideoRepository;
 import jakarta.transaction.Transactional;
@@ -42,6 +43,9 @@ class ProtubeBackVideoJsonTests {
 	VideoRepository videoRepository;
 
 	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
 	private MockMvc mockMvc;
 
 	@Test
@@ -63,6 +67,13 @@ class ProtubeBackVideoJsonTests {
 		userEndpointURL = "/api/users/" + username;
 	}
 
+	@AfterEach
+	void cleanUp(){
+		userRepository.deleteAll();
+		videoRepository.deleteAll();
+		commentRepository.deleteAll();
+	}
+
 	//USER TESTS
 	@Test
 	void createUserTest() throws Exception {
@@ -78,11 +89,10 @@ class ProtubeBackVideoJsonTests {
 		User createdUser = userRepository.findByUsername(username).orElse(null);
 		assert createdUser != null : "User should be found in the database";
 		assert createdUser.getUsername().equals(username) : "user username not matching";
-		assert createdUser.getEmail().equals(email) : "user password not matching";
+		assert createdUser.getEmail().equals(email) : "user email not matching";
 		assert createdUser.getPicture().equals(picture);
 		assert createdUser.getAuth0Id().equals(auth0Id);
 	}
-
 
 	@Test
 	void getUserTest() throws Exception {
@@ -93,6 +103,13 @@ class ProtubeBackVideoJsonTests {
 				.andExpect(status().isFound())
 				.andExpect(jsonPath("$.username").value(username))
 				.andExpect(jsonPath("$.email").value(email));
+	}
+
+	@Test
+	void getUserThatDoesntExist() throws Exception {
+		mockMvc.perform(get(userEndpointURL)
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -144,4 +161,60 @@ class ProtubeBackVideoJsonTests {
 		assert video.getDescription().equals(description);
 		assert video.getDuration().equals(duration);
 	}
+
+	@Test
+	void getAllVideosTest() throws Exception {
+		mockMvc.perform(post("/api/users")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(inputUserJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.username").value(username))
+				.andExpect(jsonPath("$.email").value(email))
+				.andExpect(jsonPath("$.picture").value(picture))
+				.andExpect(jsonPath("$.auth0Id").value(auth0Id));
+
+		mockMvc.perform(post("/api/videos")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(inputVideoJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.title").value(title))
+				.andExpect(jsonPath("$.description").value(description))
+				.andExpect(jsonPath("$.duration").value(duration))
+				.andExpect(jsonPath("$.username").value(username));
+
+		mockMvc.perform(get("/api/videos/list")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isFound())
+				.andExpect(jsonPath("$.length()").value(1))
+				.andExpect(jsonPath("$[0].title").value(title));
+	}
+
+	@Test
+	void getVideoByTitleTest() throws Exception {
+		mockMvc.perform(post("/api/users")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(inputUserJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.username").value(username))
+				.andExpect(jsonPath("$.email").value(email))
+				.andExpect(jsonPath("$.picture").value(picture))
+				.andExpect(jsonPath("$.auth0Id").value(auth0Id));
+
+		mockMvc.perform(post("/api/videos")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(inputVideoJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.title").value(title))
+				.andExpect(jsonPath("$.description").value(description))
+				.andExpect(jsonPath("$.duration").value(duration))
+				.andExpect(jsonPath("$.username").value(username));
+
+		mockMvc.perform(get("/api/videos/title/" + title)
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isFound())
+				.andExpect(jsonPath("$.title").value(title))
+				.andExpect(jsonPath("$.description").value(description));
+	}
+
+	//TODO: provar a pujar files de videos reals, per poder fer el delete. Mes el testos dels comentaris.
 }

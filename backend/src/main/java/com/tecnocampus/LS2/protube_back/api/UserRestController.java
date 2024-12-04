@@ -38,7 +38,7 @@ public class UserRestController {
         return userService.createUser(inputUser);
     }
 
-    @PostMapping("/api/logout") //TODO: ACABAR ESTA FUNCION (TINENE QUE CERRAR LA SESION EN EL OAUTH)
+    @PostMapping("/api/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok().build();
