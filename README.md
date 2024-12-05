@@ -1,5 +1,13 @@
 # Pro tube project
 
+## -------------------------ENTREGA----------------------------
+- Hem utlitzat H2 Console com a base de dades. Posem una serie de pasos per poder accedir:
+1. Executar el backend.
+2. A la consola, es mostrara la url per poder accedir (http://localhost:8080/h2-console)
+3. Quan estiguem a la pagina de login, on posa JDBC URL, haurem de posar: *jdbc:h2:mem:mydb*
+4. el username es "sa" i no hi ha contraseña. I tindrem acces a la base de dades.
+
+## -------------------------------------------------------------------
 ## Project
 The project consists of building a web application where the user can watch and comment videos uploaded by other registered users.
 
