@@ -12,11 +12,12 @@ const renderWithRouter = (ui: React.ReactElement) => {
 
 describe('CommentForm Component', () => {
     const mockOnCommentPosted = jest.fn();
+    const mockOnCancel = jest.fn();
 
     beforeEach(() => {
         fetchMock.resetMocks();
         localStorage.clear();
-    })
+    });
 
     test('renders login message when user is not logged in', () => {
         renderWithRouter(<CommentForm videoId="0" onCommentPosted={mockOnCommentPosted} />);
@@ -36,7 +37,7 @@ describe('CommentForm Component', () => {
     test('does not submit empty comments', () => {
         localStorage.setItem('user', JSON.stringify({ username: 'TestUser' }));
 
-        render(
+        renderWithRouter(
             <CommentForm videoId="0" onCommentPosted={mockOnCommentPosted} />
         );
 
@@ -48,7 +49,7 @@ describe('CommentForm Component', () => {
         expect(mockOnCommentPosted).not.toHaveBeenCalled();
     });
 
-    it('submits a comment and calls fetch', async () => {
+    test('submits a new comment with POST request', async () => {
         localStorage.setItem('user', JSON.stringify({ username: 'TestUser' }));
         const mockResponse = {
             id: 1,
@@ -59,7 +60,7 @@ describe('CommentForm Component', () => {
 
         fetchMock.mockResponseOnce(JSON.stringify(mockResponse));
 
-        render(
+        renderWithRouter(
             <CommentForm videoId="123" onCommentPosted={mockOnCommentPosted} />
         );
 
@@ -69,14 +70,71 @@ describe('CommentForm Component', () => {
         fireEvent.change(textarea, { target: { value: 'Great video!' } });
         fireEvent.click(submitButton);
 
-        // Wait for fetch to resolve
         await screen.findByText(/Submit Comment/i);
 
         expect(fetchMock).toHaveBeenCalledTimes(1);
         expect(fetchMock.mock.calls[0][0]).toBe(
             'http://localhost:8080/api/videos/123/comments'
         );
+        expect(fetchMock.mock.calls[0][1]?.method).toBe('POST');
         expect(mockOnCommentPosted).toHaveBeenCalledWith(mockResponse);
     });
-})
+
+    test('renders edit mode and submits edited comment with PATCH request', async () => {
+        localStorage.setItem('user', JSON.stringify({ username: 'TestUser' }));
+        const mockResponse = {
+            id: 1,
+            user: 'TestUser',
+            content: 'Updated comment!',
+            timestamp: '2024-11-27T12:00:00Z',
+        };
+
+        fetchMock.mockResponseOnce(JSON.stringify(mockResponse));
+
+        renderWithRouter(
+            <CommentForm
+                videoId="123"
+                onCommentPosted={mockOnCommentPosted}
+                initialContent="Original comment"
+            />
+        );
+
+        const textarea = screen.getByPlaceholderText(/Add a comment.../i);
+        expect(textarea).toHaveValue('Original comment');
+
+        fireEvent.change(textarea, { target: { value: 'Updated comment!' } });
+        const saveButton = screen.getByText(/Save/i);
+
+        fireEvent.click(saveButton);
+
+        await screen.findByText(/Save/i);
+
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+        expect(fetchMock.mock.calls[0][0]).toBe(
+            'http://localhost:8080/api/comments/123'
+        );
+        expect(fetchMock.mock.calls[0][1]?.method).toBe('PATCH');
+        expect(mockOnCommentPosted).toHaveBeenCalledWith(mockResponse);
+    });
+
+    test('calls onCancel when Cancel button is clicked in edit mode', () => {
+        localStorage.setItem('user', JSON.stringify({ username: 'TestUser' }));
+
+        renderWithRouter(
+            <CommentForm
+                videoId="123"
+                onCommentPosted={mockOnCommentPosted}
+                initialContent="Editing comment"
+                onCancel={mockOnCancel}
+            />
+        );
+
+        const cancelButton = screen.getByText(/Cancel/i);
+
+        fireEvent.click(cancelButton);
+
+        expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    });
+});
+
 
