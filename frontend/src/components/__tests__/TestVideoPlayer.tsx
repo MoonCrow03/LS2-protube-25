@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import VideoPlayer from '../VideoPlayer';
 import { BrowserRouter } from 'react-router-dom';
 import fetchMock from 'jest-fetch-mock';
+
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useParams: () => ({ id: '0' }),

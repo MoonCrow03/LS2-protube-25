@@ -46,7 +46,6 @@ const LoginButton: React.FC = () => {
 
     const handleLogin = () => {
         window.location.href = 'http://localhost:8080/oauth2/authorization/okta';  // Redirige al usuario para iniciar sesión en Okta
-
     };
 
     const handleLogout = () => {
