@@ -36,9 +36,6 @@ public class User {
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Video> uploadedVideos;
 
-    @OneToMany
-    private List<Like> likedVideos;
-
     public User(InputUserRecord inputUserRecord) {
         this.username = inputUserRecord.username();
         this.email = inputUserRecord.email();
@@ -46,7 +43,6 @@ public class User {
         this.auth0Id = inputUserRecord.auth0Id();
 
         this.uploadedVideos = new ArrayList<>();
-        this.likedVideos = new ArrayList<>();
     }
 
     public User(String username, String email, String auth0Id, String picture) {
@@ -57,15 +53,10 @@ public class User {
 
 
         this.uploadedVideos = new ArrayList<>();
-        this.likedVideos = new ArrayList<>();
     }
 
     public void addVideo(Video video) {
         uploadedVideos.add(video);
-    }
-
-    public void addLike(Like like) {
-        likedVideos.add(like);
     }
 
     @Override
