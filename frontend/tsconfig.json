@@ -10,11 +10,16 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "types": [
       "node",
       "jest",
       "@testing-library/jest-dom"
-    ],
-  }
+    ]
+  },
+  "include": [
+    "src/**/*",         // Include all your source files
+    "src/images.d.ts"   // If you have custom types for assets like images
+  ]
 }
