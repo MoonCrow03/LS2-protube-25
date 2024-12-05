@@ -1,23 +1,15 @@
-import type {Config} from 'jest';
+import type { Config } from 'jest';
 
-
-module.exports = {
-    // Other Jest configurations...
+const config: Config = {
     moduleNameMapper: {
-        '\\.css$': '<rootDir>/__mocks__/styleMock.js',
+        '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
+        '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
     },
     transform: {
         '^.+\\.(ts|tsx)$': 'ts-jest',
     },
     testEnvironment: 'jsdom',
-};
-
-const config: Config = {
-    testEnvironment: "jsdom",
-    setupFiles: ["<rootDir>/jest.polyfills.js" , "<rootDir>/jest.setup.js"],
-    testEnvironmentOptions: {
-        customExportConditions: [''],
-    },
+    setupFiles: ["<rootDir>/jest.polyfills.js", "<rootDir>/jest.setup.ts"],
     coverageThreshold: {
         global: {
             branches: 75,
@@ -29,3 +21,4 @@ const config: Config = {
 };
 
 export default config;
+
