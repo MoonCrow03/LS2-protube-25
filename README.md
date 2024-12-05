@@ -7,6 +7,8 @@
 3. Quan estiguem a la pagina de login, on posa JDBC URL, haurem de posar: *jdbc:h2:mem:mydb*
 4. el username es "sa" i no hi ha contraseña. I tindrem acces a la base de dades.
 
+
+- En quant als testos del backend, si s'executen tots alhora, hi han alguns  testos que fallen. Pero, si s'executen de manera independent tots funcionen correctament. Els que s'han d'executar de manera independent estan marcat amb un //TODO.
 ## -------------------------------------------------------------------
 ## Project
 The project consists of building a web application where the user can watch and comment videos uploaded by other registered users.
