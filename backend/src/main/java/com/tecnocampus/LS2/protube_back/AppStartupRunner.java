@@ -125,7 +125,7 @@ public class AppStartupRunner implements ApplicationRunner {
 
     public void addIfUnexistentUser(String username){
        if(!userService.userExist(username)){
-           String emailUser = username.replaceAll("\\s+", "").toLowerCase() + "@gmail.com";
+           String emailUser = username.replaceAll("\\s+", "").toLowerCase().replaceAll("\\.+$", "") + "@gmail.com";
            userService.createUser(new InputUserRecord(username, emailUser,"http://localhost:8080/assets/default_pic.png","1"));
        }
     }

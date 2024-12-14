@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-@Profile("dev")
+@Profile({"dev", "prod"})
 public class DevSecurityConfig {
     @Value("${okta.oauth2.issuer}")
     private String issuer;
