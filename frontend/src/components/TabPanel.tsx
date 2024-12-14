@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import CommentList from "./CommentList";
 import './VideoList.css';
-import url from "url";
 
 interface UsernameProps {
     username: string;

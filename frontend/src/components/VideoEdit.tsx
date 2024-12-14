@@ -43,7 +43,7 @@ const VideoUpload: React.FC = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("thumbnail", thumbnailFile);
+        formData.append("thumbnail", thumbnailFile ?? '');
 
 
         try {
@@ -53,7 +53,6 @@ const VideoUpload: React.FC = () => {
             } as RequestInit);
 
             if (response.ok) {
-                const message = await response.text();
                 navigate(`/user-channel/${user.username}`);
             } else {
                 const errorMessage = await response.text();

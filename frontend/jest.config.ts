@@ -5,9 +5,6 @@ const config: Config = {
         '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
         '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
     },
-    transform: {
-        '^.+\\.(ts|tsx)$': 'ts-jest',
-    },
     testEnvironment: 'jsdom',
     setupFiles: ["<rootDir>/jest.polyfills.js", "<rootDir>/jest.setup.ts"],
     coverageThreshold: {
