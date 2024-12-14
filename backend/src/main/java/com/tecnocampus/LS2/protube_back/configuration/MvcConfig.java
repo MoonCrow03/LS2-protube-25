@@ -5,12 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 @EnableWebMvc
+@Profile({"dev", "prod"})
 public class MvcConfig implements WebMvcConfigurer {
 
     private static final Logger LOG =
@@ -36,13 +38,5 @@ public class MvcConfig implements WebMvcConfigurer {
                         "classpath:/resources/",
                         "classpath:/META-INF/resources/")
            .setCachePeriod(3600);
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                .allowedOriginPatterns("*");
     }
 }

@@ -1,7 +1,6 @@
 package com.tecnocampus.LS2.protube_back;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tecnocampus.LS2.protube_back.domain.User;
 import com.tecnocampus.LS2.protube_back.dto.VideoDTO;
 import com.tecnocampus.LS2.protube_back.dto.record.InputCommentRecord;
 import com.tecnocampus.LS2.protube_back.dto.record.InputUserRecord;
