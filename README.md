@@ -1,4 +1,4 @@
-# Pro tube project
+# Protube project
 
 ## Project
 The project consists of building a web application where the user can watch and comment videos uploaded by other registered users.
